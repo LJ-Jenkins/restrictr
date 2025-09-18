@@ -2,3 +2,10 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+<<<<<<< HEAD
+=======
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+>>>>>>> gh-pages
