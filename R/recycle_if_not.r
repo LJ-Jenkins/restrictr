@@ -314,22 +314,46 @@ recycle_exprs <- function(
 
     if (!tf) {
       if (!is.null(.data)) {
-        .data[[nms[i]]] <- vec_recycle(
-          .data[[nms[i]]],
-          sz,
-          x_arg = nms[i],
-          call = error_call
-        )
-      } else {
-        out <- eval_tidy(
-          call2(
-            vec_recycle,
-            sym(nms[i]),
+        .data[[nms[i]]] <- try_fetch(
+          vec_recycle(
+            .data[[nms[i]]],
             sz,
             x_arg = nms[i],
             call = error_call
           ),
-          env = call
+          error = function(cnd) {
+            abort(
+              c(
+                "Error in {.fn {calling_fn}}",
+                i = "{conditionMessage(cnd)}"
+              ),
+              class = class,
+              call = error_call
+            )
+          }
+        )
+      } else {
+        out <- try_fetch(
+          eval_tidy(
+            call2(
+              vec_recycle,
+              sym(nms[i]),
+              sz,
+              x_arg = nms[i],
+              call = error_call
+            ),
+            env = call
+          ),
+          error = function(cnd) {
+            abort(
+              c(
+                "Error in {.fn {calling_fn}}",
+                i = "{conditionMessage(cnd)}"
+              ),
+              class = class,
+              call = error_call
+            )
+          }
         )
         assign(nms[i], out, pos = call)
       }

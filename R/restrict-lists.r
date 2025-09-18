@@ -42,7 +42,7 @@ prep_restrict_args <- function(args, arg_names, env, class, error_call) {
 
     given_args$mask <- given_args$mask %!||% as_name(given_args$mask)
 
-    rargs[[arg_names[i]]] <- to_restrict_args(
+    rargs[[i]] <- to_restrict_args(
       structure(
         unnamed_combine(given_args, given_args_names),
         class = fn_name
@@ -50,7 +50,7 @@ prep_restrict_args <- function(args, arg_names, env, class, error_call) {
     )
   }
 
-  return(rargs)
+  return(set_names(rargs, arg_names))
 }
 
 to_restrict_args <- function(args) {
