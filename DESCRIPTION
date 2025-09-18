@@ -1,5 +1,5 @@
 Package: restrictr
-Title: What the Package Does (One Line, Title Case)
+Title: Function Argument Validation
 Version: 0.0.0.9000
 Authors@R: 
     person("Luke", "Jenkins", , "luke.joe.jenkins@gmail.com", role = c("aut", "cre"))
@@ -16,7 +16,4 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-<<<<<<< HEAD
-=======
 URL: https://lj-jenkins.github.io/restrictr/
->>>>>>> gh-pages
