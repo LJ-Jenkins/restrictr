@@ -53,24 +53,24 @@ validate_env <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = "Argument {.var {arg}} must be an environment."
+        x = "Argument {.var {arg}} must be an environment."
       ),
       class = class,
       call = call
     )
   }
-  # if (!allow_global) {
-  #   if (identical(env, globalenv())) {
-  #     abort(
-  #       c(
-  #         "Error in {.fn {calling_fn}}",
-  #         i = "Argument {.var {arg}} cannot be the global environment."
-  #       ),
-  #       class = class,
-  #       call = call
-  #     )
-  #   }
-  # }
+  if (!allow_global) {
+    if (identical(env, globalenv())) {
+      abort(
+        c(
+          "Error in {.fn {calling_fn}}",
+          x = "Argument {.var {arg}} cannot be the global environment."
+        ),
+        class = class,
+        call = call
+      )
+    }
+  }
 }
 
 validate_bool <- function(
@@ -83,7 +83,7 @@ validate_bool <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = "Argument {.var {arg}} must be {.var TRUE} or {.var FALSE}."
+        x = "Argument {.var {arg}} must be {.var TRUE} or {.var FALSE}."
       ),
       class = class,
       call = call
@@ -105,7 +105,7 @@ validate_chr <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = "Argument {.var {arg}} must be a character vector."
+        x = "Argument {.var {arg}} must be a character vector."
       ),
       class = class,
       call = call
@@ -120,7 +120,7 @@ validate_args_given <- function(
     calling_fn = NULL) {
   if (length(args) == 0) {
     abort(
-      c("Error in {.fn {calling_fn}}", i = "No arguments provided."),
+      c("Error in {.fn {calling_fn}}", x = "No arguments provided."),
       class = class,
       call = call
     )
@@ -132,7 +132,7 @@ validate_args_named <- function(nms, fn, class = NULL, call = NULL, calling_fn =
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Arguments are not named with objects to ",
           "{fn} in positions: {.var {which(nms == '')}}."
         )
@@ -154,7 +154,7 @@ validate_mask_args_named <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Arguments for mask {.var {mask}} are not named with ",
           "objects to {fn} in positions: {.var {which(mask_names == '')}}."
         )
@@ -182,7 +182,7 @@ validate_size_arg <- function(
       abort(
         c(
           "Error in {.fn {calling_fn}}",
-          i = "Size argument for {.var {arg}} is not numeric: class {.cls {class(size)}}."
+          x = "Size argument for {.var {arg}} is not numeric: class {.cls {class(size)}}."
         ),
         class = class,
         call = call
@@ -191,7 +191,7 @@ validate_size_arg <- function(
       abort(
         c(
           "Error in {.fn {calling_fn}}",
-          i = format_inline(
+          x = format_inline(
             "Size argument for mask object {.var {mask}[[{arg}]]} is not numeric: ",
             "class {.cls {class(size)}}."
           )
@@ -207,7 +207,7 @@ validate_size_arg <- function(
       abort(
         c(
           "Error in {.fn {calling_fn}}",
-          i = format_inline(
+          x = format_inline(
             "Size argument for {.var {arg}} is not a scalar integerish value: ",
             "{length_or_obj(size)} of class {.cls {class(size)}}."
           )
@@ -219,7 +219,7 @@ validate_size_arg <- function(
       abort(
         c(
           "Error in {.fn {calling_fn}}",
-          i = format_inline(
+          x = format_inline(
             "Size argument for mask object {.var {mask}[[{arg}]]} is not a scalar ",
             "integerish value: {length_or_obj(size)} of class {.cls {class(size)}}."
           )
@@ -242,7 +242,7 @@ validate_mask_arg_exists <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = "Mask object {.var {mask_name}} does not contain variable {.var {arg}}."
+        x = "Mask object {.var {mask_name}} does not contain variable {.var {arg}}."
       ),
       class = class,
       call = call
@@ -260,7 +260,7 @@ validate_mask_exists <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Mask object {.var {mask_name}} is not found in the ",
           "{.var .env} environment specified."
         )
@@ -280,7 +280,7 @@ validate_objs_exist <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Objects {.var {obj_names[!obj_names %in% env_names(env)]}} ",
           "are not found in the {.var .env} environment specified."
         )
@@ -307,7 +307,7 @@ abort_not_logical <- function(
     "{if (!is.null(mask)) paste0(' for object {.var ', mask, '}')} ",
     "must evaluate to class {.cls logical} not {.cls {class(obj)}}."
   )
-  abort(c("Error in {.fn {calling_fn}}", i = msg), class = class, call = call)
+  abort(c("Error in {.fn {calling_fn}}", x = msg), class = class, call = call)
 }
 
 check_size_true <- function(
@@ -321,7 +321,7 @@ check_size_true <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Object {.var {darg_name}} must have {.pkg vctrs} size ",
           "{.var { .size}}, not {.var {vec_size(.data)}}."
         )
@@ -343,7 +343,7 @@ check_names_present <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Objects {.var { .names[!.names %in% names2(.data)]}} ",
           "not found in {.var {darg_name}}."
         )
@@ -364,7 +364,7 @@ validate_restrict_args_call <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "With named argument {.var {arg_name}}: calls to ",
           "{.fn restrict} must be built using the  functions: ",
           "{.fn {c('validate', 'cast', 'lossy_cast', 'recycle', 'coerce')}}."
@@ -393,7 +393,7 @@ validate_restrict_args_names <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        i = format_inline(
+        x = format_inline(
           "Invalid argument names for {.fn {fn_name}} for ",
           "named argument {.var {arg_name}}: {.var {args_names[i]}}. ",
           "Valid argument names are: {.var {chck}}."

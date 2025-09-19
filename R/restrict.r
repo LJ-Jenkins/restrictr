@@ -197,7 +197,7 @@ restrict <- function(
         abort(
           c(
             "Error in {.fn restrict}",
-            i = format_inline(
+            x = format_inline(
               "Mask object {.var {args$mask}} is not found ",
               "in the {.var .env} environment specified."
             )

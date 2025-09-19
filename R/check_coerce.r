@@ -133,7 +133,7 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
         abort(
           c(
             "Error in {.fn restrict}",
-            i = format_inline(
+            x = format_inline(
               "Invalid validation for {.var {arg_name}}: {.var {as_label(q)}} ",
               "must be a function or formula, not {.cls {class(v)}}."
             )
@@ -159,7 +159,7 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
         abort(
           c(
             "Error in {.fn restrict}",
-            i = format_inline(
+            x = format_inline(
               "Invalid validation for {.var {arg_name}}: {.var {as_label(q)}} ",
               "returned class {.cls {class(v)}}, not {.cls logical}."
             )
@@ -173,7 +173,7 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
         abort(
           c(
             "Error in {.fn restrict}",
-            i = format_inline(
+            x = format_inline(
               "Validation failed for {.var {arg_name}}: {.var {as_label(q)}} ",
               "returned {.var FALSE}."
             )

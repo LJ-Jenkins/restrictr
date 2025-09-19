@@ -276,7 +276,7 @@ cast_exprs <- function(
               "Error evaluating expression {.var {quo_string(qs[[i]])}} ",
               "{darg %!||% format_inline('for data mask {.var {darg}}')}: "
             ),
-            i = "{conditionMessage(cnd)}."
+            x = "{conditionMessage(cnd)}."
           ),
           class = class,
           call = error_call
@@ -304,7 +304,7 @@ cast_exprs <- function(
         abort(
           c(
             "Error in {.fn {calling_fn}}",
-            i = format_inline(
+            x = format_inline(
               "Object {.var {nms[i]}} ",
               "{darg %!||% format_inline('for data mask {.var {darg}}')} ",
               "is of type {.cls {actual}}, not {.cls {expected}}."
@@ -335,7 +335,7 @@ cast_exprs <- function(
           abort(
             c(
               "Error in {.fn {calling_fn}}",
-              i = "{conditionMessage(cnd)}"
+              x = "{conditionMessage(cnd)}"
             ),
             class = class,
             call = error_call

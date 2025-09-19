@@ -256,9 +256,9 @@ check_logi_exprs <- function(
             "Error in {.fn {calling_fn}}",
             i = format_inline(
               "Error evaluating expression {.var {quo_string(tf[[i]])}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')}: ",
-              i = "{conditionMessage(cnd)}."
-            )
+              "{darg %!||% format_inline('for data mask {.var {darg}}')}: "
+            ),
+            x = "{conditionMessage(cnd)}"
           ),
           class = class,
           call = error_call
@@ -280,9 +280,9 @@ check_logi_exprs <- function(
 
     if (eval_tidy(logi_check)) {
       abort(
-        message = c(
+        c(
           "Error in {.fn {calling_fn}}",
-          i = nms[i] %""% message %||% format_inline(
+          x = nms[[i]] %""% message %||% format_inline(
             "Argument {.var {quo_string(tf[[i]])}} ",
             "{darg %!||% format_inline('for data mask {.var {darg}}')} ",
             "returned {.var {if (check_false) 'FALSE' else 'TRUE'}}."

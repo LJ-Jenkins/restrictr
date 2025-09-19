@@ -7,7 +7,7 @@ prep_restrict_args <- function(args, arg_names, env, class, error_call) {
         abort(
           c(
             "Error in {.fn restrict}",
-            i = format_inline(
+            x = format_inline(
               "Each argument to {.fn restrict} must be a call to ",
               "{.fn validate}, {.fn cast}, {.fn lossy_cast}, {.fn recycle} or {.fn coerce}, ",
               "not {.var {arg_names[i]} = {args[[i]]}}."
