@@ -13,6 +13,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Function Argument Validation">
 <meta name="description" content="Tools for function argument validation including options for safe, automatic type casting and size recycling.">
 <meta property="og:description" content="Tools for function argument validation including options for safe, automatic type casting and size recycling.">
+<meta property="og:image" content="https://lj-jenkins.github.io/restrictr/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -45,8 +46,10 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="restrictr">restrictr<a class="anchor" aria-label="anchor" href="#restrictr"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="restrictr-">restrictr <a class="anchor" aria-label="anchor" href="#restrictr-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments.</p>
@@ -90,12 +93,12 @@
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fl">1L</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f(1L, list(x = 1))</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `abort_if_not()`</span></span>
 <span><span class="co"># ℹ Argument `is.character(x)` returned `FALSE`</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f("hi", list(x = 1))</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `abort_if_not()`</span></span>
 <span><span class="co"># ℹ `hi` is too short!</span></span></code></pre></div>
@@ -109,7 +112,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fl">5L</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co"># f(5L, 1)</span></span>
 <span><span class="co"># [1] "numeric"</span></span>
 <span><span class="co"># [1] 5</span></span>
 <span></span>
@@ -119,10 +122,10 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co"># f(1.5)</span></span>
 <span><span class="co"># [1] 1</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span><span class="op">)</span></span>
+<span><span class="co"># f("hi")</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `cast_if_not()`</span></span>
 <span><span class="co"># ℹ Can't convert `x` &lt;character&gt; to &lt;integer&gt;.</span></span></code></pre></div>
@@ -133,7 +136,7 @@
 <span>    <span class="fu"><a href="reference/schema.html">schema</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f(data.frame(x = 2))</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `schema()`</span></span>
 <span><span class="co"># ℹ Argument `x == 1` for data mask `df` returned `FALSE`.</span></span>
@@ -145,7 +148,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f(data.frame(x = 1L))</span></span>
 <span><span class="co"># [1] "numeric"</span></span>
 <span></span>
 <span><span class="co"># schema_recycle is only implemented for lists.</span></span>
@@ -156,7 +159,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="va">li</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="fl">1</span>, z <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f(list(x = 1, y = 1, z = 1))</span></span>
 <span><span class="co"># x y z</span></span>
 <span><span class="co"># 3 5 3</span></span></code></pre></div>
 <p><code>restrict</code> combines all functionality into a multi-purpose tool. Both variables and named elements within data.frames/lists can be validated and casted/recycled. They keyword functions of <code>validate</code>, <code>cast</code>, <code>lossy_cast</code>, <code>recycle</code> and <code>coerce</code> determines whether any type casting and/or recycling occurs. Validation functions can then be given, either in the form of functions or lambdas. Assignment occurs back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>). A contradictory example just to show features:</p>
@@ -177,7 +180,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"`x` lossily casted to"</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"and recycled using value of `df$x` to length"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span>, <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co"># f(data.frame(x = 3L), 1.5)</span></span>
 <span><span class="co"># `df$x` casted to numeric from the initial `x` class</span></span>
 <span><span class="co"># `x` lossily casted to integer and recycled using value of `df$x` to 3</span></span>
 <span></span>
@@ -186,7 +189,7 @@
 <span>  <span class="fu"><a href="reference/restrict.html">restrict</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fu">validate</span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span>, y <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># f(data.frame(x = 1L, y = "hi"))</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `restrict()`</span></span>
 <span><span class="co"># ℹ Object `df` is of type &lt;data.frame&lt;/ x: integer/ y: character/&gt;&gt;, not &lt;data.frame&lt;&gt;&gt;.</span></span>
@@ -195,7 +198,7 @@
 <span>  <span class="fu"><a href="reference/restrict.html">restrict</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">recycle</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">f</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co"># f(1:5)</span></span>
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `restrict()`</span></span>
 <span><span class="co"># ℹ Can't recycle `x` (size 5) to size 10.</span></span></code></pre></div>
