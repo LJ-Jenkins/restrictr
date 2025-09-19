@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# restrictr
+# restrictr <img id="logo" src="man/figures/logo.png" align="right" width="17%" height="17%" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -48,12 +48,12 @@ f <- \(x, y) {
   )
 }
 
-f(1L, list(x = 1))
+# f(1L, list(x = 1))
 # Error in `f()`:
 # ! Error in `abort_if_not()`
 # ℹ Argument `is.character(x)` returned `FALSE`
 
-f("hi", list(x = 1))
+# f("hi", list(x = 1))
 # Error in `f()`:
 # ! Error in `abort_if_not()`
 # ℹ `hi` is too short!
@@ -75,7 +75,7 @@ f <- \(x, y) {
   print(length(y))
 }
 
-f(5L, 1)
+# f(5L, 1)
 # [1] "numeric"
 # [1] 5
 
@@ -85,10 +85,10 @@ f <- \(x) {
   print(x)
 }
 
-f(1.5)
+# f(1.5)
 # [1] 1
 
-f("hi")
+# f("hi")
 # Error in `f()`:
 # ! Error in `cast_if_not()`
 # ℹ Can't convert `x` <character> to <integer>.
@@ -106,7 +106,7 @@ f <- \(df) {
     schema(x == 1)
 }
 
-f(data.frame(x = 2))
+# f(data.frame(x = 2))
 # Error in `f()`:
 # ! Error in `schema()`
 # ℹ Argument `x == 1` for data mask `df` returned `FALSE`.
@@ -118,7 +118,7 @@ f <- \(df) {
   print(class(df$x))
 }
 
-f(data.frame(x = 1L))
+# f(data.frame(x = 1L))
 # [1] "numeric"
 
 # schema_recycle is only implemented for lists.
@@ -129,7 +129,7 @@ f <- \(li) {
   print(lengths(li))
 }
 
-f(list(x = 1, y = 1, z = 1))
+# f(list(x = 1, y = 1, z = 1))
 # x y z
 # 3 5 3
 ```
@@ -161,7 +161,7 @@ f <- \(df, x) {
   cat("`x` lossily casted to", class(x), "and recycled using value of `df$x` to length", length(x))
 }
 
-f(data.frame(x = 3L), 1.5)
+# f(data.frame(x = 3L), 1.5)
 # `df$x` casted to numeric from the initial `x` class
 # `x` lossily casted to integer and recycled using value of `df$x` to 3
 
@@ -170,7 +170,7 @@ f <- \(df) {
   restrict(df = validate(type = data.frame()))
 }
 
-f(data.frame(x = 1L, y = "hi"))
+# f(data.frame(x = 1L, y = "hi"))
 # Error in `f()`:
 # ! Error in `restrict()`
 # ℹ Object `df` is of type <data.frame</ x: integer/ y: character/>>, not <data.frame<>>.
@@ -179,7 +179,7 @@ f <- \(x) {
   restrict(x = recycle(size = 10))
 }
 
-f(1:5)
+# f(1:5)
 # Error in `f()`:
 # ! Error in `restrict()`
 # ℹ Can't recycle `x` (size 5) to size 10.
