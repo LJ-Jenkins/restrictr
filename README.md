@@ -20,9 +20,6 @@ coercion/recycling of function arguments.
 - `restrict()` for validation, safe type casting and safe recycling of
   both variables and named elements of data.frames/lists.
 
-restrictr and `restrict` were inspired by MATLAB’s [arguments
-block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
-
 ## Installation
 
 You can install the development version of restrictr from
@@ -61,7 +58,7 @@ f <- \(x, y) {
 
 `cast_if_not` and `recycle_if_not` provide safe casting and recycling
 from [vctrs](https://vctrs.r-lib.org/). Variables are provided on the
-left hand side and the expected type/size is provided on the left.
+left hand side and the expected type/size is provided on the right.
 Assignment is automatically done back into the environment specified
 (default is the
 [caller_env()](https://rlang.r-lib.org/reference/stack.html)):
@@ -188,3 +185,29 @@ f <- \(x) {
 ### Notes
 
 This package is still in the development stage and is subject to change.
+
+restrictr and `restrict` were inspired by MATLAB’s [arguments
+block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
+
+restrictr functions do not do any clean-up in the case of errors. As
+typical (or all) usage should be used within functions, this should have
+little impact. However, if you intend to continue using the variables in
+the associated environments, care should be taken when using the
+non-schema functions. See the following example:
+
+``` r
+local({
+  x <- 1L
+  y <- 1L
+  cast_if_not(x = double(), y = character()) |> try()
+  cat(
+    "Code has errored but `x` has still been casted to:",
+    class(x), "\n",
+    "in the environment specified for the `cast_if_not` call."
+  )
+})
+#> Error in eval(quote({ : Error in `cast_if_not()`
+#> ✖ Can't convert `y` <integer> to <character>.
+#> Code has errored but `x` has still been casted to: numeric 
+#>  in the environment specified for the `cast_if_not` call.
+```
