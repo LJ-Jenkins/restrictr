@@ -101,7 +101,7 @@ expressions &amp; the assignment of the recycled variables. Cannot be the global
 <span class="r-in"><span>  <span class="fu">recycle_if_not</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(quote({ : Error in `recycle_if_not()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Can't recycle `x` (size 4) to size 1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Can't recycle `x` (size 4) to size 1.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error : Can't recycle `x` (size 4) to size 1.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span></span>
@@ -119,7 +119,7 @@ expressions &amp; the assignment of the recycled variables. Cannot be the global
 <span class="r-in"><span>  <span class="fu">recycle_if_not</span><span class="op">(</span>x <span class="op">=</span> <span class="va">y</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(quote({ : Error in</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Size argument for `x` is not a scalar integerish value: object length `3` of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Size argument for `x` is not a scalar integerish value: object length `3` of</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   class <span style="color: #0000BB;">&lt;numeric&gt;</span>.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error : Size argument for `x` is not a scalar integerish value:</span></span></span>
 <span class="r-in"><span><span class="co"># object length `3` of class &lt;numeric&gt;.</span></span></span>
@@ -179,7 +179,7 @@ expressions &amp; the assignment of the recycled variables. Cannot be the global
 <span class="r-in"><span>  <span class="fu">recycle_if_not</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3</span>, .env <span class="op">=</span> <span class="va">e</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(quote({ : Error in `recycle_if_not()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Objects `x` are not found in the `.env` environment specified.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Objects `x` are not found in the `.env` environment specified.</span>
 <span class="r-in"><span><span class="co"># Error: Objects `x` are not found in the `.env` environment specified.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># for expressions (rhs), the `.env` argument is preferentially chosen,</span></span></span>

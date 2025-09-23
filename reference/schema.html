@@ -132,14 +132,14 @@ are versions of <code>schema()</code> that attempt to coerce the data to the des
 <span class="r-in"><span>  <span class="fu">schema</span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Argument `is.numeric(y)` for data mask `li` returned `FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Argument `is.numeric(y)` for data mask `li` returned `FALSE`.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Argument `is.numeric(y)` for data mask `.data` returned `FALSE`.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">li</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">schema</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Expression `length(x)` for object `li` must evaluate to class <span style="color: #0000BB;">&lt;logical&gt;</span> not</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Expression `length(x)` for object `li` must evaluate to class <span style="color: #0000BB;">&lt;logical&gt;</span> not</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">&lt;integer&gt;</span>.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Expression `length(x)` for object `.data` must evaluate to class</span></span></span>
 <span class="r-in"><span><span class="co"># &lt;logical&gt; not &lt;integer&gt;.</span></span></span>
@@ -151,7 +151,7 @@ are versions of <code>schema()</code> that attempt to coerce the data to the des
 <span class="r-in"><span>  <span class="fu">schema</span><span class="op">(</span><span class="st">"a must be double"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">is.double</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a must be double</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> a must be double</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: a must be double</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Alternatively, one error message can be used for all expressions:</span></span></span>
@@ -162,28 +162,28 @@ are versions of <code>schema()</code> that attempt to coerce the data to the des
 <span class="r-in"><span>    .message <span class="op">=</span> <span class="st">"a must be integer and b cannot contain 'x'."</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> a must be integer and b cannot contain 'x'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> a must be integer and b cannot contain 'x'.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: a must be integer and b cannot contain 'x'.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># injection and glue can be used to supply expressions, names, and messages:</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="st">"my error"</span></span></span>
 <span class="r-in"><span><span class="fu">schema</span><span class="op">(</span><span class="va">df</span>, <span class="st">"{x}"</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> my error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> my error</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: my error</span></span></span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="fu">schema</span><span class="op">(</span><span class="va">df</span>, <span class="op">{</span><span class="op">{</span> <span class="va">x</span> <span class="op">}</span><span class="op">}</span> <span class="op">:=</span> <span class="op">!</span><span class="op">!</span><span class="va">y</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> my error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> my error</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: my error</span></span></span>
 <span class="r-in"><span><span class="fu">schema</span><span class="op">(</span><span class="va">df</span>, <span class="op">!</span><span class="op">!</span><span class="va">x</span> <span class="op">:=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> my error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> my error</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: my error</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"my error"</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">schema</span><span class="op">(</span><span class="va">df</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> my error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> my error</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: my error</span></span></span>
 </code></pre></div>
     </div>

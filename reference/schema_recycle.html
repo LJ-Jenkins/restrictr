@@ -126,14 +126,14 @@ as well as <a href="cast_if_not.html">cast_if_not</a> for a non-data-masked vers
 <span class="r-in"><span>  <span class="fu">schema_recycle</span><span class="op">(</span>z <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema_recycle()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Can't recycle `z` (size 2) to size 5.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Can't recycle `z` (size 2) to size 5.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Can't recycle `z` (size 2) to size 5.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">li</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">schema_recycle</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Size argument for `x` is not numeric: class <span style="color: #0000BB;">&lt;character&gt;</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Size argument for `x` is not numeric: class <span style="color: #0000BB;">&lt;character&gt;</span>.</span>
 <span class="r-in"><span><span class="co"># =&gt; Size argument for `z` is not numeric: class &lt;character&gt;.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># schema_recycle works sequentially with quosures, so references to objects will</span></span></span>
@@ -154,14 +154,14 @@ as well as <a href="cast_if_not.html">cast_if_not</a> for a non-data-masked vers
 <span class="r-in"><span>  <span class="fu">schema_recycle</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, .size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema_recycle()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Object `li` must have <span style="color: #0000BB;">vctrs</span> size `5`, not `3`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Object `li` must have <span style="color: #0000BB;">vctrs</span> size `5`, not `3`.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Object `li` must have vctrs size `5`, not `3`.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">li</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">schema_recycle</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, .names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"p"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema_recycle()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Objects `p` not found in `li`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Objects `p` not found in `li`.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Names `p` not found in `li`.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># injection and glue can be used to supply expressions, names, and messages:</span></span></span>
@@ -178,7 +178,7 @@ as well as <a href="cast_if_not.html">cast_if_not</a> for a non-data-masked vers
 <span class="r-in"><span><span class="va">xg_name</span> <span class="op">&lt;-</span> <span class="st">"{x_name}"</span></span></span>
 <span class="r-in"><span><span class="fu">schema_recycle</span><span class="op">(</span><span class="va">li</span>, <span class="op">{</span><span class="op">{</span> <span class="va">xg_name</span> <span class="op">}</span><span class="op">}</span> <span class="op">:=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in eval(expr, envir) : Error in `schema_recycle()`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Can't recycle `x` (size 2) to size 10.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Can't recycle `x` (size 2) to size 10.</span>
 <span class="r-in"><span><span class="co"># =&gt; Error: Can't recycle `x` (size 2) to size 10.</span></span></span>
 </code></pre></div>
     </div>

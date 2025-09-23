@@ -52,7 +52,7 @@
 </div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments.</p>
+<p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments. Note: This package is still in the development stage and is subject to change.</p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -68,7 +68,6 @@
 <li>
 <code><a href="reference/restrict.html">restrict()</a></code> for validation, safe type casting and safe recycling of both variables and named elements of data.frames/lists.</li>
 </ul>
-<p>restrictr and <code>restrict</code> were inspired by MATLAB’s <a href="https://uk.mathworks.com/help/matlab/ref/arguments.html" class="external-link">arguments block</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -102,7 +101,7 @@
 <span><span class="co"># Error in `f()`:</span></span>
 <span><span class="co"># ! Error in `abort_if_not()`</span></span>
 <span><span class="co"># ℹ `hi` is too short!</span></span></code></pre></div>
-<p><code>cast_if_not</code> and <code>recycle_if_not</code> provide safe casting and recycling from <a href="https://vctrs.r-lib.org/" class="external-link">vctrs</a>. Variables are provided on the left hand side and the expected type/size is provided on the left. Assignment is automatically done back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>):</p>
+<p><code>cast_if_not</code> and <code>recycle_if_not</code> provide safe casting and recycling from <a href="https://vctrs.r-lib.org/" class="external-link">vctrs</a>. Variables are provided on the left hand side and the expected type/size is provided on the right. Assignment is automatically done back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/cast_if_not.html">cast_if_not</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -205,7 +204,23 @@
 <div class="section level3">
 <h3 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h3>
-<p>This package is still in the development stage and is subject to change.</p>
+<p>restrictr and <code>restrict</code> were inspired by MATLAB’s <a href="https://uk.mathworks.com/help/matlab/ref/arguments.html" class="external-link">arguments block</a>.</p>
+<p>restrictr functions do not do any clean-up in the case of errors. As typical (or all) usage should be used within functions, this should have little impact. However, if you intend to continue using the variables in the associated environments, care should be taken when using the non-schema functions. See the following example:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1L</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">1L</span></span>
+<span>  <span class="fu"><a href="reference/cast_if_not.html">cast_if_not</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Code has errored but `x` has still been casted to:"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"\n"</span>,</span>
+<span>    <span class="st">"in the environment specified for the `cast_if_not` call."</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in eval(quote({ : Error in `cast_if_not()`</span></span>
+<span><span class="co">#&gt; ✖ Can't convert `y` &lt;integer&gt; to &lt;character&gt;.</span></span>
+<span><span class="co">#&gt; Code has errored but `x` has still been casted to: numeric </span></span>
+<span><span class="co">#&gt;  in the environment specified for the `cast_if_not` call.</span></span></code></pre></div>
 </div>
 </div>
 </div>
