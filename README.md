@@ -7,7 +7,8 @@
 <!-- badges: end -->
 
 restrictr provides tools for the validation and safe type
-coercion/recycling of function arguments.
+coercion/recycling of function arguments. Note: This package is still in
+the development stage and is subject to change.
 
 ## Overview
 
@@ -183,8 +184,6 @@ f <- \(x) {
 ```
 
 ### Notes
-
-This package is still in the development stage and is subject to change.
 
 restrictr and `restrict` were inspired by MATLAB’s [arguments
 block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
