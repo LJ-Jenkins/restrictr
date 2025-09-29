@@ -127,7 +127,13 @@ recycle_if_not <- function(
     calling_fn = "recycle_if_not"
   )
 
-  nms <- glue_names(qs, .env)
+  nms <- glue_names(
+    qs,
+    .env,
+    "recycle_if_not",
+    .class,
+    .error_call
+  )
 
   validate_args_named(
     nms,
@@ -204,7 +210,13 @@ recycle_masked_exprs <- function(
   if (!is.null(.names)) {
     check_names_present(
       .data,
-      .names |> glue_chr(caller_env(2)),
+      .names |>
+        glue_chr(
+          caller_env(2),
+          .calling_fn,
+          .class,
+          .call
+        ),
       .darg,
       class = .class,
       call = .call,
@@ -216,7 +228,13 @@ recycle_masked_exprs <- function(
     return(.data)
   }
 
-  nms <- glue_names(qs, caller_env(2))
+  nms <- glue_names(
+    qs,
+    caller_env(2),
+    .calling_fn,
+    .class,
+    .call
+  )
 
   validate_mask_args_named(
     .darg,
@@ -264,17 +282,13 @@ recycle_exprs <- function(
     sz <- try_fetch(
       eval_tidy(qs[[i]], data = .data, env = call),
       error = function(cnd) {
-        abort(
-          c(
-            "Error in {.fn {calling_fn}}",
-            i = format_inline(
-              "Error evaluating expression {.var {quo_string(qs[[i]])}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')}"
-            ),
-            x = "{conditionMessage(cnd)}."
-          ),
-          class = class,
-          call = error_call
+        expr_error(
+          as_label(qs[[i]]),
+          darg,
+          cnd,
+          calling_fn,
+          class,
+          error_call
         )
       }
     )
@@ -291,23 +305,18 @@ recycle_exprs <- function(
       if (tf) {
         next
       } else {
-        expected <- eval_tidy(
-          call2(vec_size, sym(nms[i])),
-          data = .data,
-          env = call
-        )
-
-        abort(
-          c(
-            "Error in {.fn {calling_fn}}",
-            x = format_inline(
-              "Object {.var {nms[i]}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')} ",
-              "is of size {.cls {expected}}, not {.cls {sz}}."
-            )
+        size_error(
+          nms[i],
+          eval_tidy(
+            call2(vec_size, sym(nms[i])),
+            data = .data,
+            env = call
           ),
-          class = class,
-          call = error_call
+          sz,
+          darg,
+          calling_fn,
+          class,
+          error_call
         )
       }
     }
@@ -322,14 +331,7 @@ recycle_exprs <- function(
             call = error_call
           ),
           error = function(cnd) {
-            abort(
-              c(
-                "Error in {.fn {calling_fn}}",
-                x = "{conditionMessage(cnd)}"
-              ),
-              class = class,
-              call = error_call
-            )
+            cnd_error(cnd, calling_fn, class, error_call)
           }
         )
       } else {
@@ -345,14 +347,7 @@ recycle_exprs <- function(
             env = call
           ),
           error = function(cnd) {
-            abort(
-              c(
-                "Error in {.fn {calling_fn}}",
-                x = "{conditionMessage(cnd)}"
-              ),
-              class = class,
-              call = error_call
-            )
+            cnd_error(cnd, calling_fn, class, error_call)
           }
         )
         assign(nms[i], out, pos = call)

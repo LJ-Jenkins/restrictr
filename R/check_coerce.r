@@ -126,20 +126,17 @@ check_coerce_size.coerce <- function(args, mask, arg_name, env, class, error_cal
 
 check_validates <- function(args, mask, arg_name, env, class, error_call) {
   if (length(args$validations) > 0) {
-    for (q in args$validations) {
-      v <- eval_tidy(q, data = mask, env = env)
+    for (i in seq_along(args$validations)) {
+      v <- eval_tidy(args$validations[[i]], data = mask, env = env)
 
       if (!is_formula(v) && !is_function(v)) {
-        abort(
-          c(
-            "Error in {.fn restrict}",
-            x = format_inline(
-              "Invalid validation for {.var {arg_name}}: {.var {as_label(q)}} ",
-              "must be a function or formula, not {.cls {class(v)}}."
-            )
-          ),
-          class = class,
-          call = error_call
+        r_ff_error(
+          as_label(args$validations[[i]]),
+          c(arg_name, args$mask),
+          class(v),
+          "restrict",
+          class,
+          error_call
         )
       }
 
@@ -156,30 +153,27 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
       }
 
       if (!is.logical(v)) {
-        abort(
-          c(
-            "Error in {.fn restrict}",
-            x = format_inline(
-              "Invalid validation for {.var {arg_name}}: {.var {as_label(q)}} ",
-              "returned class {.cls {class(v)}}, not {.cls logical}."
-            )
-          ),
-          class = class,
-          call = error_call
+        not_logical_error(
+          as_label(args$validations[[i]]),
+          NULL,
+          c(arg_name, args$mask),
+          class(v),
+          "restrict",
+          class,
+          error_call
         )
       }
 
       if (!all(v)) {
-        abort(
-          c(
-            "Error in {.fn restrict}",
-            x = format_inline(
-              "Validation failed for {.var {arg_name}}: {.var {as_label(q)}} ",
-              "returned {.var FALSE}."
-            )
-          ),
-          class = class,
-          call = error_call
+        tf_error(
+          as_label(args$validations[[i]]),
+          NULL,
+          c(arg_name, args$mask),
+          NULL,
+          TRUE,
+          "restrict",
+          class,
+          error_call
         )
       }
     }

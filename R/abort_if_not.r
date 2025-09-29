@@ -83,7 +83,13 @@ abort_if_not <- function(
     calling_fn = "abort_if_not"
   )
 
-  nms <- glue_names(tf, caller_env())
+  nms <- glue_names(
+    tf,
+    caller_env(),
+    calling_fn = "abort_if_not",
+    error_class = .class,
+    error_call = .error_call
+  )
 
   check_logi_exprs(
     NULL,
@@ -133,7 +139,13 @@ abort_if <- function(
     calling_fn = "abort_if"
   )
 
-  nms <- glue_names(tf, caller_env())
+  nms <- glue_names(
+    tf,
+    caller_env(),
+    calling_fn = "abort_if_not",
+    error_class = .class,
+    error_call = .error_call
+  )
 
   check_logi_exprs(
     NULL,
@@ -203,7 +215,13 @@ check_masked_logi_exprs <- function(
   if (!is.null(.names)) {
     check_names_present(
       .data,
-      .names |> glue_chr(caller_env(2)),
+      .names |>
+        glue_chr(
+          caller_env(2),
+          .calling_fn,
+          .class,
+          .call
+        ),
       .darg,
       class = .class,
       call = .call,
@@ -215,7 +233,13 @@ check_masked_logi_exprs <- function(
     invisible(NULL)
   }
 
-  nms <- glue_names(tf, caller_env(2))
+  nms <- glue_names(
+    tf,
+    caller_env(2),
+    .calling_fn,
+    .class,
+    .call
+  )
 
   check_logi_exprs(
     .data,
@@ -251,45 +275,41 @@ check_logi_exprs <- function(
     y <- withCallingHandlers(
       eval_tidy(tf[[i]], data = .data),
       error = function(cnd) {
-        abort(
-          c(
-            "Error in {.fn {calling_fn}}",
-            i = format_inline(
-              "Error evaluating expression {.var {quo_string(tf[[i]])}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')}: "
-            ),
-            x = "{conditionMessage(cnd)}"
-          ),
-          class = class,
-          call = error_call
+        expr_error(
+          as_label(tf[[i]]),
+          darg,
+          cnd,
+          calling_fn,
+          class,
+          error_call
         )
       }
     )
 
     if (!is.logical(y)) {
-      abort_not_logical(
-        y,
-        quo_string(tf[[i]]),
-        expr_name = nms[i] %""% NULL,
-        mask = darg,
-        class = class,
-        call = error_call,
-        calling_fn = calling_fn
+      not_logical_error(
+        as_label(tf[[i]]),
+        darg,
+        NULL,
+        class(y),
+        calling_fn,
+        class,
+        error_call
       )
     }
 
     if (eval_tidy(logi_check)) {
       abort(
-        c(
-          "Error in {.fn {calling_fn}}",
-          x = nms[[i]] %""% message %||% format_inline(
-            "Argument {.var {quo_string(tf[[i]])}} ",
-            "{darg %!||% format_inline('for data mask {.var {darg}}')} ",
-            "returned {.var {if (check_false) 'FALSE' else 'TRUE'}}."
-          )
-        ),
-        class = class,
-        call = error_call
+        tf_error(
+          as_label(tf[[i]]),
+          darg,
+          NULL,
+          nms[i] %""% message %||% NULL,
+          check_false,
+          calling_fn,
+          class,
+          error_call
+        )
       )
     }
   }

@@ -169,7 +169,13 @@ restrict <- function(
     calling_fn = "restrict"
   )
 
-  arg_names <- glue_names(rargs, .env)
+  arg_names <- glue_names(
+    rargs,
+    .env,
+    "restrict",
+    .class,
+    .error_call
+  )
 
   validate_args_named(
     arg_names,
@@ -194,17 +200,8 @@ restrict <- function(
     mask <- NULL
     if (!is.null(args$mask)) {
       mask <- .env[[args$mask]] %||%
-        abort(
-          c(
-            "Error in {.fn restrict}",
-            x = format_inline(
-              "Mask object {.var {args$mask}} is not found ",
-              "in the {.var .env} environment specified."
-            )
-          ),
-          class = .class,
-          call = .error_call
-        )
+        mask_error(args$mask, "restrict", .class, .error_call)
+
       check_names_present(
         mask,
         arg,

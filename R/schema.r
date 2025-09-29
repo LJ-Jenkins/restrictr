@@ -55,7 +55,8 @@
 #'     is.integer(a),
 #'     !grepl("x", b),
 #'     .message = "a must be integer and b cannot contain 'x'."
-#'   ) |> try()
+#'   ) |>
+#'   try()
 #' # => Error: a must be integer and b cannot contain 'x'.
 #'
 #' # injection and glue can be used to supply expressions, names, and messages:

@@ -123,7 +123,13 @@ cast_if_not <- function(
     calling_fn = "cast_if_not"
   )
 
-  nms <- glue_names(qs, .env)
+  nms <- glue_names(
+    qs,
+    .env,
+    "cast_if_not",
+    .class,
+    .error_call
+  )
 
   validate_args_named(
     nms,
@@ -207,7 +213,13 @@ cast_masked_exprs <- function(
   if (!is.null(.names)) {
     check_names_present(
       .data,
-      .names |> glue_chr(caller_env(2)),
+      .names |>
+        glue_chr(
+          caller_env(2),
+          .calling_fn,
+          .class,
+          .call
+        ),
       .darg,
       class = .class,
       call = .call,
@@ -219,7 +231,13 @@ cast_masked_exprs <- function(
     return(.data)
   }
 
-  nms <- glue_names(qs, caller_env(2))
+  nms <- glue_names(
+    qs,
+    caller_env(2),
+    .calling_fn,
+    .class,
+    .call
+  )
 
   validate_mask_args_named(
     .darg,
@@ -269,17 +287,13 @@ cast_exprs <- function(
     qs_type <- try_fetch(
       eval_tidy(qs[[i]], data = .data, env = call),
       error = function(cnd) {
-        abort(
-          c(
-            "Error in {.fn {calling_fn}}",
-            i = format_inline(
-              "Error evaluating expression {.var {quo_string(qs[[i]])}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')}: "
-            ),
-            x = "{conditionMessage(cnd)}."
-          ),
-          class = class,
-          call = error_call
+        expr_error(
+          as_label(qs[[i]]),
+          darg,
+          cnd,
+          calling_fn,
+          class,
+          error_call
         )
       }
     )
@@ -294,24 +308,18 @@ cast_exprs <- function(
       if (tf) {
         next
       } else {
-        expected <- ptype_show(qs_type)
-        actual <- eval_tidy(
-          call2(ptype_show, sym(nms[i])),
-          data = .data,
-          env = call
-        )
-
-        abort(
-          c(
-            "Error in {.fn {calling_fn}}",
-            x = format_inline(
-              "Object {.var {nms[i]}} ",
-              "{darg %!||% format_inline('for data mask {.var {darg}}')} ",
-              "is of type {.cls {actual}}, not {.cls {expected}}."
-            )
+        class_error(
+          nms[i],
+          eval_tidy(
+            call2(ptype_show, sym(nms[i])),
+            data = .data,
+            env = call
           ),
-          class = class,
-          call = error_call
+          ptype_show(qs_type),
+          darg,
+          calling_fn,
+          class,
+          error_call
         )
       }
     }
@@ -332,14 +340,7 @@ cast_exprs <- function(
       out <- try_fetch(
         eval_tidy(vctrs_call, data = .data, env = call),
         error = function(cnd) {
-          abort(
-            c(
-              "Error in {.fn {calling_fn}}",
-              x = "{conditionMessage(cnd)}"
-            ),
-            class = class,
-            call = error_call
-          )
+          cnd_error(cnd, calling_fn, class, error_call)
         }
       )
 
