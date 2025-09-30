@@ -18,9 +18,9 @@ r_prmask <- function(arg, mask) {
 
 length_or_obj <- function(x) {
   if (length(x) > 1) {
-    y <- "object length {.var {length(x)}}"
+    y <- "length {.var {length(x)}}"
   } else {
-    y <- "value {.var {x}}"
+    y <- "{.var {x}}"
   }
   format_inline(y)
 }

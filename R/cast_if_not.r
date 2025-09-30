@@ -239,10 +239,10 @@ cast_masked_exprs <- function(
     .call
   )
 
-  validate_mask_args_named(
-    .darg,
+  validate_args_named(
     nms,
     "cast",
+    mask = .darg,
     class = .class,
     call = .call,
     calling_fn = .calling_fn

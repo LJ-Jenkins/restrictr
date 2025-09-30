@@ -80,11 +80,11 @@ test_that("schema_cast checks", {
   expect_error(schema_cast(df, y = character(), .size = 3, .names = c("x", "y")))
   expect_error(schema_cast(df, y = character(), .size = 2, .names = c("x", "y", "a")))
   expect_no_error(schema_cast(df, !!!qcall))
-  expect_error(schema_cast(df, !!!qlcall), regexp = "Objects `Error here` not found in `df`.")
+  expect_error(schema_cast(df, !!!qlcall), regexp = "Named elements `Error here` not found in `df`.")
   expect_no_error(schema_cast(li, y = double(), .size = 2))
   expect_error(
     schema_cast(df, !!!glue_list),
-    regexp = "Objects `a_glue_msg_for_var_a` not found in `df`."
+    regexp = "Named elements `a_glue_msg_for_var_a` not found in `df`."
   )
   li <- list(x = 1L, y = 1L)
   y <- 1.5
@@ -125,10 +125,10 @@ test_that("schema_recycle checks", {
   expect_error(schema_recycle(li, z = 2, .size = 10, .names = c("x", "y")))
   expect_error(schema_recycle(li, z = 2, .size = 3, .names = c("x", "y", "a")))
   expect_no_error(schema_recycle(li, !!!qcall))
-  expect_error(schema_recycle(li, !!!qlcall), regexp = "Objects `Error here` not found in `li`.")
+  expect_error(schema_recycle(li, !!!qlcall), regexp = "Named elements `Error here` not found in `li`.")
   expect_error(
     schema_recycle(li, !!!glue_list),
-    regexp = "Objects `a_glue_msg_for_var_a` not found in `li`."
+    regexp = "Named elements `a_glue_msg_for_var_a` not found in `li`."
   )
   li <- list(x = 1, y = 1)
   y <- 1:10

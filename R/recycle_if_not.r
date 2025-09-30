@@ -236,10 +236,10 @@ recycle_masked_exprs <- function(
     .call
   )
 
-  validate_mask_args_named(
-    .darg,
+  validate_args_named(
     nms,
     "recycle",
+    mask = .darg,
     class = .class,
     call = .call,
     calling_fn = .calling_fn
@@ -293,7 +293,15 @@ recycle_exprs <- function(
       }
     )
 
-    validate_size_arg(sz, nms[i], class = class, call = error_call)
+    validate_size_arg(
+      sz,
+      nms[i],
+      mask = darg,
+      allow_null = FALSE,
+      class = class,
+      call = error_call,
+      calling_fn = calling_fn
+    )
 
     tf <- eval_tidy(
       call2(vec_size, sym(nms[i])),
