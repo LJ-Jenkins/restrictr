@@ -57,8 +57,8 @@ glue_names <- function(obj, eval_call, calling_fn, error_class, error_call) {
 
 restrict_list_c <- function(li, names, new_name = "validations") {
   c(
-    li[names %in% c("type", "size", "mask", "lossy")],
-    set_names(list(li[!names %in% c("type", "size", "mask", "lossy")]), new_name)
+    li[names %in% c("type", "size", "mask", "lossy", "na_rm")],
+    set_names(list(li[!names %in% c("type", "size", "mask", "lossy", "na_rm")]), new_name)
   )
 }
 

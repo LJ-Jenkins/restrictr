@@ -41,6 +41,15 @@ prep_restrict_args <- function(args, arg_names, env, class, error_call) {
         class = fn_names[i]
       )
     )
+
+    r_validate_bool(
+      rargs[[i]]$na_rm,
+      "na_rm",
+      arg_names[i],
+      rargs[[i]]$mask,
+      class,
+      error_call
+    )
   }
 
   return(set_names(rargs, arg_names))
@@ -53,6 +62,7 @@ to_restrict_args <- function(args) {
 #' @exportS3Method
 to_restrict_args.validate <- function(args) {
   args$coerce <- args$cast <- args$recycle <- args$lossy <- FALSE
+  args$na_rm <- args$na_rm %||% FALSE
   args
 }
 
@@ -60,6 +70,7 @@ to_restrict_args.validate <- function(args) {
 to_restrict_args.cast <- function(args) {
   args$coerce <- args$recycle <- args$lossy <- FALSE
   args$cast <- TRUE
+  args$na_rm <- args$na_rm %||% FALSE
   args
 }
 
@@ -67,6 +78,7 @@ to_restrict_args.cast <- function(args) {
 to_restrict_args.lossy_cast <- function(args) {
   args$coerce <- args$recycle <- FALSE
   args$cast <- args$lossy <- TRUE
+  args$na_rm <- args$na_rm %||% FALSE
   args
 }
 
@@ -74,6 +86,7 @@ to_restrict_args.lossy_cast <- function(args) {
 to_restrict_args.recycle <- function(args) {
   args$coerce <- args$cast <- args$lossy <- FALSE
   args$recycle <- TRUE
+  args$na_rm <- args$na_rm %||% FALSE
   args
 }
 
@@ -81,5 +94,6 @@ to_restrict_args.recycle <- function(args) {
 to_restrict_args.coerce <- function(args) {
   args$coerce <- args$cast <- args$recycle <- TRUE
   args$lossy <- args$lossy %||% FALSE
+  args$na_rm <- args$na_rm %||% FALSE
   args
 }

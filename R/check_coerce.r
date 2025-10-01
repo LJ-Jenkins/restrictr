@@ -172,7 +172,7 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
         )
       }
 
-      if (!all(v)) {
+      if (!all(v, na.rm = args$na_rm)) {
         tf_error(
           as_label(args$validations[[i]]),
           NULL,

@@ -255,8 +255,9 @@ validate_lossy <- function(
       call
     )
   } else if ("lossy" %in% given_args_names && fn_name == "coerce") {
-    validate_lossy_arg(
+    r_validate_bool(
       lossy,
+      "lossy",
       arg_name,
       mask,
       class,
@@ -265,17 +266,18 @@ validate_lossy <- function(
   }
 }
 
-validate_lossy_arg <- function(
-    lossy,
+r_validate_bool <- function(
+    bool,
+    arg_type,
     arg,
     mask,
     class,
     call) {
-  if (!is_bool(lossy)) {
+  if (!is_bool(bool)) {
     abort(
       c(
         "Error in {.fn restrict}",
-        x = "{.var lossy} argument for {.var {arg}}{prmask(mask)} must be {.var TRUE} or {.var FALSE}."
+        x = "{.var {arg_type}} argument for {.var {arg}}{prmask(mask)} must be {.var TRUE} or {.var FALSE}."
       ),
       class = class,
       call = call

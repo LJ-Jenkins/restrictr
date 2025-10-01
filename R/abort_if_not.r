@@ -9,6 +9,7 @@
 #' (a logical vector of all) `TRUE` for no error to occur. If the expressions
 #' are named, the names will be used in the error message.
 #' @param .message single default error message for non-named expressions.
+#' @param .na_rm if TRUE, NA values are removed in the logical vectors (default is FALSE)
 #' @param .class class to assign to the error (passed to [rlang::abort]).
 #' @param .error_call the call environment to use for the error (passed to [rlang::abort]).
 #' @details `abort_if()` is the opposite of `abort_if_not()`, i.e. expressions
@@ -59,6 +60,7 @@
 abort_if_not <- function(
     ...,
     .message = NULL,
+    .na_rm = FALSE,
     .class = NULL,
     .error_call = caller_env()) {
   tf <- enquos(...)
@@ -97,6 +99,7 @@ abort_if_not <- function(
     nms,
     check_false = TRUE,
     message = .message,
+    na_rm = .na_rm,
     class = .class,
     call = caller_env(),
     error_call = .error_call,
@@ -115,6 +118,7 @@ abortifnot <- abort_if_not
 abort_if <- function(
     ...,
     .message = NULL,
+    .na_rm = FALSE,
     .class = NULL,
     .error_call = caller_env()) {
   tf <- enquos(...)
@@ -153,6 +157,7 @@ abort_if <- function(
     nms,
     check_false = FALSE,
     message = .message,
+    na_rm = .na_rm,
     class = .class,
     call = caller_env(),
     error_call = .error_call,
@@ -166,6 +171,7 @@ check_masked_logi_exprs <- function(
     .names,
     .size,
     .message,
+    .na_rm,
     .darg,
     .class,
     .call,
@@ -247,6 +253,7 @@ check_masked_logi_exprs <- function(
     nms = nms,
     check_false = TRUE,
     message = .message,
+    na_rm = .na_rm,
     class = .class,
     call = caller_env(2),
     error_call = .call,
@@ -261,18 +268,19 @@ check_logi_exprs <- function(
     nms,
     check_false,
     message,
+    na_rm,
     class,
     call,
     error_call = NULL,
     darg = NULL,
     calling_fn = NULL) {
-  logi_check <- quote(!all(y))
+  logi_check <- quote(!all(y, na.rm = na_rm))
   if (!check_false) {
-    logi_check <- quote(any(y))
+    logi_check <- quote(any(y, na.rm = na_rm))
   }
 
   for (i in seq_along(tf)) {
-    y <- withCallingHandlers(
+    y <- try_fetch(
       eval_tidy(tf[[i]], data = .data),
       error = function(cnd) {
         expr_error(

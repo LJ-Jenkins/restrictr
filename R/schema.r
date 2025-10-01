@@ -16,6 +16,7 @@
 #' @param .size optional scalar integerish value for the size of that
 #' the data.frame/list must have.
 #' @param .message single default error message for non-named expressions.
+#' @param .na_rm if TRUE, NA values are removed in the logical vectors (default is FALSE)
 #' @param .class class to assign to the error (passed to [rlang::abort]).
 #' @param .error_call the call environment to use for the error (passed to [rlang::abort]).
 #' @details [schema_cast][restrictr::schema_cast] and [schema_recycle][restrictr::schema_recycle]
@@ -84,6 +85,7 @@ schema.data.frame <- function(
     .names = NULL,
     .size = NULL,
     .message = NULL,
+    .na_rm = FALSE,
     .class = NULL,
     .error_call = caller_env()) {
   check_masked_logi_exprs(
@@ -92,9 +94,10 @@ schema.data.frame <- function(
     .names = .names,
     .size = .size,
     .message = .message,
+    .na_rm = .na_rm,
     .darg = caller_arg(.data),
-    .class = .class, .call =
-      .error_call,
+    .class = .class,
+    .call = .error_call,
     .calling_fn = "schema"
   )
 }
@@ -107,6 +110,7 @@ schema.list <- function(
     .names = NULL,
     .size = NULL,
     .message = NULL,
+    .na_rm = FALSE,
     .class = NULL,
     .error_call = caller_env()) {
   check_masked_logi_exprs(
@@ -115,9 +119,10 @@ schema.list <- function(
     .names = .names,
     .size = .size,
     .message = .message,
+    .na_rm = .na_rm,
     .darg = caller_arg(.data),
-    .class = .class, .call =
-      .error_call,
+    .class = .class,
+    .call = .error_call,
     .calling_fn = "schema"
   )
 }
