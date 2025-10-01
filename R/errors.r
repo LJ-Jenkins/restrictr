@@ -1,3 +1,5 @@
+# allto be changed when errors are updated to be by class
+
 cnd_error <- function(cnd, calling_fn, error_class, error_call) {
   abort(
     c(
@@ -143,6 +145,39 @@ r_ff_error <- function(
       "Error in {.fn {calling_fn}}",
       i = r_arg_mask %!||% r_prmask(r_arg_mask[1], r_arg_mask[2]),
       x = "Expression {.var {expr}} must be a {.cls function} or {.cls formula}, not {.cls {actual_class}}."
+    ),
+    class = error_class,
+    call = error_call
+  )
+}
+
+r_lossy_error <- function(
+    arg,
+    mask,
+    error_class,
+    error_call) {
+  abort(
+    c(
+      "Error in {.fn restrict}",
+      x = "Error for {.var {arg}}{prmask(mask)}: {.var lossy} argument can only be given for {.fn coerce} calls."
+    ),
+    class = error_class,
+    call = error_call
+  )
+}
+
+vctrs_is_error <- function(
+    obj_name,
+    class1,
+    class2,
+    mask,
+    calling_fn,
+    error_class,
+    error_call) {
+  abort(
+    c(
+      "Error in {.fn {calling_fn}}",
+      x = "Object {.var {obj_name}}{prmask(mask)} of type {.cls {class1}} cannot be compared with {.cls {class2}} in {.pkg vctrs}."
     ),
     class = error_class,
     call = error_call

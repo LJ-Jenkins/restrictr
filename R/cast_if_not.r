@@ -298,10 +298,31 @@ cast_exprs <- function(
       }
     )
 
-    tf <- eval_tidy(
-      call2(vec_is, sym(nms[i]), ptype = qs_type),
-      data = .data,
-      env = call
+    tf <- try_fetch(
+      eval_tidy(
+        call2(vec_is, sym(nms[i]), ptype = qs_type),
+        data = .data,
+        env = call
+      ),
+      error = function(cnd) {
+        vctrs_is_error(
+          nms[i],
+          eval_tidy(
+            call2(base::class, sym(nms[i])),
+            data = .data,
+            env = call
+          ),
+          eval_tidy(
+            call2(base::class, qs_type),
+            data = .data,
+            env = call
+          ),
+          darg,
+          calling_fn,
+          class,
+          error_call
+        )
+      }
     )
 
     if (no_assignment) {

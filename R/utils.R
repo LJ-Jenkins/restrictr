@@ -55,10 +55,10 @@ glue_names <- function(obj, eval_call, calling_fn, error_class, error_call) {
     )
 }
 
-unnamed_combine <- function(li, names, unnamed_name = "validations") {
+restrict_list_c <- function(li, names, new_name = "validations") {
   c(
-    li[names != ""],
-    set_names(list(li[names == ""]), unnamed_name)
+    li[names %in% c("type", "size", "mask", "lossy")],
+    set_names(list(li[!names %in% c("type", "size", "mask", "lossy")]), new_name)
   )
 }
 

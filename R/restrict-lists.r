@@ -21,21 +21,23 @@ prep_restrict_args <- function(args, arg_names, env, class, error_call) {
 
     given_args_names <- call_args_names(args[[i]])
 
-    validate_restrict_args_names(
-      given_args_names,
-      fn_names[i],
-      arg_names[i],
-      class = class,
-      call = error_call
-    )
-
     given_args <- call_args(args[[i]])
 
     given_args$mask <- given_args$mask %!||% as_name(given_args$mask)
 
+    validate_lossy(
+      given_args$lossy,
+      given_args_names,
+      fn_names[i],
+      arg_names[i],
+      given_args$mask,
+      class,
+      error_call
+    )
+
     rargs[[i]] <- to_restrict_args(
       structure(
-        unnamed_combine(given_args, given_args_names),
+        restrict_list_c(given_args, given_args_names),
         class = fn_names[i]
       )
     )

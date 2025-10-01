@@ -1,3 +1,5 @@
+# all to be changed when errors are updated to be by class
+
 validate_env <- function(
     env,
     arg = caller_arg(env),
@@ -229,7 +231,7 @@ validate_restrict_args_call <- function(
     abort(
       c(
         "Error in {.fn {calling_fn}}",
-        x = "With named argument {.var {arg_name}}: calls must be built using the  functions: {.fn {allowed}}."
+        x = "With named argument {.var {arg_name}}: calls must be built using the functions: {.fn {allowed}}."
       ),
       class = class,
       call = call
@@ -237,25 +239,43 @@ validate_restrict_args_call <- function(
   }
 }
 
-validate_restrict_args_names <- function(
-    args_names,
+validate_lossy <- function(
+    lossy,
+    given_args_names,
     fn_name,
     arg_name,
-    class = NULL,
-    call = NULL,
-    calling_fn = "restrict") {
-  args_names <- args_names[args_names != ""]
-  chck <- c("type", "size", "mask")
-  if (fn_name == "coerce") {
-    chck <- c(chck, "lossy")
+    mask,
+    class,
+    call) {
+  if ("lossy" %in% given_args_names && fn_name != "coerce") {
+    r_lossy_error(
+      arg_name,
+      mask,
+      class,
+      call
+    )
+  } else if ("lossy" %in% given_args_names && fn_name == "coerce") {
+    validate_lossy_arg(
+      lossy,
+      arg_name,
+      mask,
+      class,
+      call
+    )
   }
-  i <- !args_names %in% chck
-  if (any(i)) {
+}
+
+validate_lossy_arg <- function(
+    lossy,
+    arg,
+    mask,
+    class,
+    call) {
+  if (!is_bool(lossy)) {
     abort(
       c(
-        "Error in {.fn {calling_fn}}",
-        x = "Invalid argument names for {.fn {fn_name}} for named argument {.var {arg_name}}: {.var {args_names[i]}}.",
-        i = "Valid argument names are: {.var {chck}}."
+        "Error in {.fn restrict}",
+        x = "{.var lossy} argument for {.var {arg}}{prmask(mask)} must be {.var TRUE} or {.var FALSE}."
       ),
       class = class,
       call = call

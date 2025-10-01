@@ -126,6 +126,14 @@ check_coerce_size.coerce <- function(args, mask, arg_name, env, class, error_cal
 
 check_validates <- function(args, mask, arg_name, env, class, error_call) {
   if (length(args$validations) > 0) {
+    nms <- glue_names(
+      args$validations,
+      env,
+      "restrict",
+      class,
+      error_call
+    )
+
     for (i in seq_along(args$validations)) {
       v <- eval_tidy(args$validations[[i]], data = mask, env = env)
 
@@ -169,7 +177,7 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
           as_label(args$validations[[i]]),
           NULL,
           c(arg_name, args$mask),
-          NULL,
+          nms[i] %""% NULL,
           TRUE,
           "restrict",
           class,
