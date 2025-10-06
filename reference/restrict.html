@@ -138,6 +138,7 @@ evaluations. Expressions are evaluated using <a href="https://rlang.r-lib.org/re
 the <code>data</code> argument set to the mask and the <code>env</code> argument set to the
 environment specified by the <code>.env</code> argument to <code>restrict()</code>.
 The mask must be present within the environment.</p></li>
+<li><p><code>na_rm</code>: if TRUE, NA values are removed in the logical vectors from the validations before evaluating (default is FALSE).</p></li>
 </ul><p>All other inputs should be unnamed validations: either expressions or formulas
 (that evaluate to logical). <code>restrict</code> first evaluates type, then size, then the
 validations. Any change from the prior expression is reflected in subsequent

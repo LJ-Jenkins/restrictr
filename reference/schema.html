@@ -60,6 +60,7 @@ thus applies vctrs size rules.</p>
 <span>  .names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .message <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .na_rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  .class <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .error_call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -71,6 +72,7 @@ thus applies vctrs size rules.</p>
 <span>  .names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .message <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .na_rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  .class <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .error_call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -102,6 +104,10 @@ the data.frame/list must have.</p></dd>
 
 <dt id="arg--message">.message<a class="anchor" aria-label="anchor" href="#arg--message"></a></dt>
 <dd><p>single default error message for non-named expressions.</p></dd>
+
+
+<dt id="arg--na-rm">.na_rm<a class="anchor" aria-label="anchor" href="#arg--na-rm"></a></dt>
+<dd><p>if TRUE, NA values are removed in the logical vectors (default is FALSE)</p></dd>
 
 
 <dt id="arg--class">.class<a class="anchor" aria-label="anchor" href="#arg--class"></a></dt>
