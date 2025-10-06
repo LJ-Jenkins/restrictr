@@ -274,9 +274,9 @@ check_logi_exprs <- function(
     error_call = NULL,
     darg = NULL,
     calling_fn = NULL) {
-  logi_check <- quote(!all(y, na.rm = na_rm))
+  logi_check <- quote(!all(y))
   if (!check_false) {
-    logi_check <- quote(any(y, na.rm = na_rm))
+    logi_check <- quote(any(y))
   }
 
   for (i in seq_along(tf)) {
@@ -306,18 +306,44 @@ check_logi_exprs <- function(
       )
     }
 
+    if (isTRUE(na_rm) && anyNA(y)) {
+      y <- y[!is.na(y)]
+    } else if (anyNA(y)) {
+      tf_error(
+        as_label(tf[[i]]),
+        darg,
+        NULL,
+        nms[i] %""% message %||% NULL,
+        NA,
+        calling_fn,
+        class,
+        error_call
+      )
+    }
+
+    if (length(y) == 0) {
+      tf_error(
+        as_label(tf[[i]]),
+        darg,
+        NULL,
+        nms[i] %""% message %||% NULL,
+        NULL,
+        calling_fn,
+        class,
+        error_call
+      )
+    }
+
     if (eval_tidy(logi_check)) {
-      abort(
-        tf_error(
-          as_label(tf[[i]]),
-          darg,
-          NULL,
-          nms[i] %""% message %||% NULL,
-          check_false,
-          calling_fn,
-          class,
-          error_call
-        )
+      tf_error(
+        as_label(tf[[i]]),
+        darg,
+        NULL,
+        nms[i] %""% message %||% NULL,
+        check_false,
+        calling_fn,
+        class,
+        error_call
       )
     }
   }

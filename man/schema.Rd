@@ -14,6 +14,7 @@ schema(.data, ...)
   .names = NULL,
   .size = NULL,
   .message = NULL,
+  .na_rm = FALSE,
   .class = NULL,
   .error_call = caller_env()
 )
@@ -24,6 +25,7 @@ schema(.data, ...)
   .names = NULL,
   .size = NULL,
   .message = NULL,
+  .na_rm = FALSE,
   .class = NULL,
   .error_call = caller_env()
 )
@@ -42,6 +44,8 @@ present in the data.frame/list.}
 the data.frame/list must have.}
 
 \item{.message}{single default error message for non-named expressions.}
+
+\item{.na_rm}{if TRUE, NA values are removed in the logical vectors (default is FALSE)}
 
 \item{.class}{class to assign to the error (passed to \link[rlang:abort]{rlang::abort}).}
 

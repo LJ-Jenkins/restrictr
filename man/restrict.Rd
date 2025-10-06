@@ -60,6 +60,7 @@ evaluations. Expressions are evaluated using \link[rlang:eval_tidy]{rlang::eval_
 the \code{data} argument set to the mask and the \code{env} argument set to the
 environment specified by the \code{.env} argument to \code{restrict()}.
 The mask must be present within the environment.
+\item \code{na_rm}: if TRUE, NA values are removed in the logical vectors from the validations before evaluating (default is FALSE).
 }
 
 All other inputs should be unnamed validations: either expressions or formulas

@@ -172,7 +172,35 @@ check_validates <- function(args, mask, arg_name, env, class, error_call) {
         )
       }
 
-      if (!all(v, na.rm = args$na_rm)) {
+      if (isTRUE(args$na_rm) && anyNA(v)) {
+        v <- v[!is.na(v)]
+      } else if (anyNA(v)) {
+        tf_error(
+          as_label(args$validations[[i]]),
+          NULL,
+          c(arg_name, args$mask),
+          nms[i] %""% NULL,
+          NA,
+          "restrict",
+          class,
+          error_call
+        )
+      }
+
+      if (length(v) == 0) {
+        tf_error(
+          as_label(args$validations[[i]]),
+          NULL,
+          c(arg_name, args$mask),
+          nms[i] %""% NULL,
+          NULL,
+          "restrict",
+          class,
+          error_call
+        )
+      }
+
+      if (!all(v)) {
         tf_error(
           as_label(args$validations[[i]]),
           NULL,

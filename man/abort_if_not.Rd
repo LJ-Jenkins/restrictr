@@ -6,7 +6,13 @@
 \alias{abort_if}
 \title{Ensure the Truth of R Expressions}
 \usage{
-abort_if_not(..., .message = NULL, .class = NULL, .error_call = caller_env())
+abort_if_not(
+  ...,
+  .message = NULL,
+  .na_rm = FALSE,
+  .class = NULL,
+  .error_call = caller_env()
+)
 }
 \arguments{
 \item{...}{any number of R expressions, which should each evaluate to
@@ -14,6 +20,8 @@ abort_if_not(..., .message = NULL, .class = NULL, .error_call = caller_env())
 are named, the names will be used in the error message.}
 
 \item{.message}{single default error message for non-named expressions.}
+
+\item{.na_rm}{if TRUE, NA values are removed in the logical vectors (default is FALSE)}
 
 \item{.class}{class to assign to the error (passed to \link[rlang:abort]{rlang::abort}).}
 

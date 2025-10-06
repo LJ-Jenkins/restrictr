@@ -44,11 +44,21 @@ tf_error <- function(
     calling_fn,
     error_class,
     error_call) {
+  cf <- if (is.null(check_false)) {
+    "an empty vector"
+  } else if (is.na(check_false)) {
+    "`NA`"
+  } else if (check_false) {
+    "`FALSE`"
+  } else if (!check_false) {
+    "`TRUE`"
+  }
+
   abort(
     c(
       "Error in {.fn {calling_fn}}",
       i = r_arg_mask %!||% r_prmask(r_arg_mask[1], r_arg_mask[2]),
-      x = msg %||% "Expression {.var {expr}}{prmask(mask)} returned {.var {if (check_false) 'FALSE' else 'TRUE'}}."
+      x = msg %||% "Expression {.var {expr}}{prmask(mask)} returned {cf}."
     ),
     class = error_class,
     call = error_call

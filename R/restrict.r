@@ -37,6 +37,7 @@
 #' the `data` argument set to the mask and the `env` argument set to the
 #' environment specified by the `.env` argument to `restrict()`.
 #' The mask must be present within the environment.
+#' - `na_rm`: if TRUE, NA values are removed in the logical vectors from the validations before evaluating (default is FALSE).
 #'
 #' All other inputs should be unnamed validations: either expressions or formulas
 #' (that evaluate to logical). `restrict` first evaluates type, then size, then the
