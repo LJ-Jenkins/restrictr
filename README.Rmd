@@ -199,10 +199,4 @@ local({
     "in the environment specified for the `cast_if_not` call."
   )
 })
-# Error in eval(quote({ : 
-#   Caused by error in `cast_if_not()`:
-# ℹ In argument: `y = character()`.
-# ! Can't convert `y` <integer> to <character>.
-# Code has errored but `x` has still been casted to: numeric 
-#  in the environment specified for the `cast_if_not` call.
 ```

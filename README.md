@@ -8,6 +8,9 @@
 [![R-CMD-check](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/LJ-Jenkins/restrictr/graph/badge.svg)](https://app.codecov.io/gh/LJ-Jenkins/restrictr)
+[![R-CMD-check](https://github.com/LJ-Jenkins/restrictr_test/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LJ-Jenkins/restrictr_test/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/LJ-Jenkins/restrictr_test/graph/badge.svg)](https://app.codecov.io/gh/LJ-Jenkins/restrictr_test)
 <!-- badges: end -->
 
 restrictr provides tools for the validation and safe type
@@ -220,10 +223,4 @@ local({
 #> ! Can't convert `y` <integer> to <character>.
 #> Code has errored but `x` has still been casted to: numeric 
 #>  in the environment specified for the `cast_if_not` call.
-# Error in eval(quote({ : 
-#   Caused by error in `cast_if_not()`:
-# ℹ In argument: `y = character()`.
-# ! Can't convert `y` <integer> to <character>.
-# Code has errored but `x` has still been casted to: numeric 
-#  in the environment specified for the `cast_if_not` call.
 ```
