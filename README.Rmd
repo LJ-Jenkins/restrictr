@@ -1,34 +1,38 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # restrictr <img id="logo" src="man/figures/logo.png" align="right" width="17%" height="17%" />
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/LJ-Jenkins/restrictr/graph/badge.svg)](https://app.codecov.io/gh/LJ-Jenkins/restrictr)
+[![Codecov test coverage](https://codecov.io/gh/LJ-Jenkins/restrictr/graph/badge.svg)](https://app.codecov.io/gh/LJ-Jenkins/restrictr)
 <!-- badges: end -->
 
-restrictr provides tools for the validation and safe type
-coercion/recycling of function arguments. Note: This package is still in
-the development stage and is subject to change.
+restrictr provides tools for the validation and safe type coercion/recycling of function arguments. Note: This package is still in the development stage and is subject to change.
 
 ## Overview
 
-- `abort_if_not()` for general validation.
-- `cast_if_not()` and `recycle_if_not()` for safe type casting and
-  recycling of variables.
-- `schema()` for the validation of named elements of data.frames/lists.
-- `schema_cast()` and `schema_recycle()` for the safe type casting and
-  recycling of named elements of data.frames/lists.
-- `restrict()` for validation, safe type casting and safe recycling of
-  both variables and named elements of data.frames/lists.
+* `abort_if_not()` for general validation.
+* `cast_if_not()` and `recycle_if_not()` for safe type casting and recycling of variables.
+* `schema()` for the validation of named elements of data.frames/lists.
+* `schema_cast()` and `schema_recycle()` for the safe type casting and recycling of named elements of data.frames/lists.
+* `restrict()` for validation, safe type casting and safe recycling of both variables and named elements of data.frames/lists.
 
 ## Installation
 
-You can install the development version of restrictr from
-[GitHub](https://github.com/) with:
+You can install the development version of restrictr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
@@ -39,7 +43,7 @@ pak::pak("LJ-Jenkins/restrictr")
 
 `abort_if_not` can be used for all validations:
 
-``` r
+```{r abort_if_not example}
 library(restrictr)
 
 f <- \(x, y) {
@@ -63,14 +67,9 @@ f <- \(x, y) {
 # ! `hi` is too short!
 ```
 
-`cast_if_not` and `recycle_if_not` provide safe casting and recycling
-from [vctrs](https://vctrs.r-lib.org/). Variables are provided on the
-left hand side and the expected type/size is provided on the right.
-Assignment is automatically done back into the environment specified
-(default is the
-[caller_env()](https://rlang.r-lib.org/reference/stack.html)):
+`cast_if_not` and `recycle_if_not` provide safe casting and recycling from [vctrs](https://vctrs.r-lib.org/). Variables are provided on the left hand side and the expected type/size is provided on the right. Assignment is automatically done back into the environment specified (default is the [caller_env()](https://rlang.r-lib.org/reference/stack.html)):
 
-``` r
+```{r cast_if_not and recycle_if_not examples}
 f <- \(x, y) {
   cast_if_not(x = double())
   recycle_if_not(y = x)
@@ -99,13 +98,9 @@ f <- \(x) {
 # ! Can't convert `x` <character> to <integer>.
 ```
 
-`schema`, `schema_cast` and `schema_recycle` provide the same
-functionality for data-masked arguments from data.frames/lists. The size
-of the data.frame/list and whether certain names are present can also be
-checked using the `.names` and `.size` arguments. The data-mask object
-is returned (unaltered for `schema`):
+`schema`, `schema_cast` and `schema_recycle` provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the `.names` and `.size` arguments. The data-mask object is returned (unaltered for `schema`):
 
-``` r
+```{r schema examples}
 f <- \(df) {
   df <- df |>
     schema(x == 1)
@@ -140,17 +135,9 @@ f <- \(li) {
 # 3 5 3
 ```
 
-`restrict` combines all functionality into a multi-purpose tool. Both
-variables and named elements within data.frames/lists can be validated
-and casted/recycled. They keyword functions of `validate`, `cast`,
-`lossy_cast`, `recycle` and `coerce` determines whether any type casting
-and/or recycling occurs. Validation functions can then be given, either
-in the form of functions or lambdas. Assignment occurs back into the
-environment specified (default is the
-[caller_env()](https://rlang.r-lib.org/reference/stack.html)). A
-contradictory example just to show features:
+`restrict` combines all functionality into a multi-purpose tool. Both variables and named elements within data.frames/lists can be validated and casted/recycled. They keyword functions of `validate`, `cast`, `lossy_cast`, `recycle` and `coerce` determines whether any type casting and/or recycling occurs. Validation functions can then be given, either in the form of functions or lambdas. Assignment occurs back into the environment specified (default is the [caller_env()](https://rlang.r-lib.org/reference/stack.html)). A contradictory example just to show features:
 
-``` r
+```{r restrict example}
 f <- \(df, x) {
   restrict(
     df = validate(
@@ -193,18 +180,13 @@ f <- \(x) {
 # ! Can't recycle `x` (size 5) to size 10.
 ```
 
-### Notes
+###  Notes
 
-restrictr and `restrict` were inspired by MATLAB’s [arguments
-block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
+restrictr and `restrict` were inspired by MATLAB's [arguments block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
 
-restrictr functions do not do any clean-up in the case of errors. As
-typical usage should be within functions, this should have little
-impact. However, if you intend to continue using the variables in the
-associated environments, care should be taken. See the following
-example:
+restrictr functions do not do any clean-up in the case of errors. As typical usage should be within functions, this should have little impact. However, if you intend to continue using the variables in the associated environments, care should be taken. See the following example:
 
-``` r
+```{r clean-up example}
 local({
   x <- 1L
   y <- 1L
@@ -215,11 +197,6 @@ local({
     "in the environment specified for the `cast_if_not` call."
   )
 })
-#> Error in eval(quote({ : Caused by error in `cast_if_not()`:
-#> ℹ In argument: `y = character()`.
-#> ! Can't convert `y` <integer> to <character>.
-#> Code has errored but `x` has still been casted to: numeric 
-#>  in the environment specified for the `cast_if_not` call.
 # Error in eval(quote({ : 
 #   Caused by error in `cast_if_not()`:
 # ℹ In argument: `y = character()`.
