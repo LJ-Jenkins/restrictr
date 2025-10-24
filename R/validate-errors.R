@@ -1,6 +1,5 @@
 validate_env <- function(
     env,
-    arg = caller_arg(env),
     allow_global = FALSE,
     call = NULL,
     restrictr_fn = NULL) {
@@ -17,10 +16,11 @@ validate_env <- function(
 validate_bool <- function(
     bool,
     arg = caller_arg(bool),
+    inarg = NULL,
     call = NULL,
     restrictr_fn = NULL) {
   if (!is_bool(bool)) {
-    abort_bool(bool = arg, call = call, restrictr_fn = restrictr_fn)
+    abort_bool(bool = arg, inarg = inarg, call = call, restrictr_fn = restrictr_fn)
   }
 }
 
@@ -175,11 +175,13 @@ validate_lossy <- function(
     lossy,
     given_args_names,
     fn_name,
+    inarg = NULL,
     call = NULL,
     restrictr_fn = NULL) {
   if ("lossy" %in% given_args_names && fn_name != "coerce") {
     abort_restrict_lossy(
       given_fn = fn_name,
+      inarg = inarg,
       call = call,
       restrictr_fn = restrictr_fn
     )
@@ -187,6 +189,7 @@ validate_lossy <- function(
     validate_bool(
       lossy,
       arg = "lossy",
+      inarg = inarg,
       call = call,
       restrictr_fn = restrictr_fn
     )

@@ -26,7 +26,7 @@ cnd_bullets <- function(cnd, restrictr_fn, arg, name = NULL, msg = NULL, mask = 
     "!" = msg %||% if (inherits(cnd, "restrictr_error")) {
       cnd_body(cnd)
     } else {
-        unname(cnd_header(cnd)) %le0% cnd$message
+      unname(cnd_header(cnd)) %le0% cnd$message
     },
     NULL = if (inherits(cnd, "restrictr_error")) {
       cnd_footer(cnd)
@@ -38,7 +38,12 @@ cnd_bullets <- function(cnd, restrictr_fn, arg, name = NULL, msg = NULL, mask = 
 
 #' @export
 cnd_header.restrictr_error <- function(cnd, ...) {
-  c(NULL = format_inline("{.strong Caused by error in {.fn {cnd$restrictr_fn}}}."))
+  c(
+    NULL = format_inline("{.strong Caused by error in {.fn {cnd$restrictr_fn}}}."),
+    i = if (!is.null(cnd$inarg)) {
+      format_inline("In argument: {.var {cnd$inarg}}.")
+    }
+  )
 }
 
 #' @export
@@ -103,10 +108,12 @@ cnd_body.restrictr_error_masked_names_not_present <- function(cnd, ...) {
 
 #' @export
 cnd_body.restrictr_error_restrict_args <- function(cnd, ...) {
-  cli_bullets(c(
-    i = "With named argument {.var {cnd$arg_name}}.",
-    "!" = "calls must be built using the functions: {.fn {cnd$allowed}}, not {.fn {cnd$given}}."
-  ))
+  format_inline("Calls must be built using the functions: {.fn {cnd$allowed}}.") |> excl()
+}
+
+#' @export
+cnd_footer.restrictr_error_restrict_args <- function(cnd, ...) {
+  c("x" = format_inline("Given: {.fn {cnd$arg} = {cnd$given}}."))
 }
 
 #' @export

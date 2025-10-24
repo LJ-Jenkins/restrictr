@@ -2,7 +2,6 @@
 % Please edit documentation in R/abort_if_not.r
 \name{abort_if_not}
 \alias{abort_if_not}
-\alias{abortifnot}
 \alias{abort_if}
 \title{Ensure the Truth of R Expressions}
 \usage{

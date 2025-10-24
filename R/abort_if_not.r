@@ -62,7 +62,7 @@ abort_if_not <- function(
     .na_rm = FALSE,
     .error_call = caller_env()) {
   tf <- enquos(...)
-  restrictr_fn <- caller_name()
+  restrictr_fn <- "abort_if_not"
 
   validate_env(
     .error_call,
@@ -105,10 +105,10 @@ abort_if_not <- function(
   )
 }
 
-#' @rdname abort_if_not
-#' @usage NULL
-#' @export
-abortifnot <- abort_if_not
+# #' @rdname abort_if_not
+# #' @usage NULL
+# #' @export
+# abortifnot <- abort_if_not
 
 #' @rdname abort_if_not
 #' @usage NULL
@@ -119,7 +119,7 @@ abort_if <- function(
     .na_rm = FALSE,
     .error_call = caller_env()) {
   tf <- enquos(...)
-  restrictr_fn <- caller_name()
+  restrictr_fn <- "abort_if"
 
   validate_args_given(
     tf,

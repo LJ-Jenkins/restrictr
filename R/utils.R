@@ -67,7 +67,7 @@ ptype_show <- function(.x) {
   gsub("Prototype: ", "", capture.output(vec_ptype_show(.x)))
 }
 
-caller_name <- function(n = 1) {
-  x <- caller_call(n)
-  paste0(call_ns(x) %!||% paste0(call_ns(x), "::"), call_name(x))
-}
+# caller_name <- function(n = 1) {
+#   x <- caller_call(n)
+#   paste0(call_ns(x) %!||% paste0(call_ns(x), "::"), call_name(x))
+# }

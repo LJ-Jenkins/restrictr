@@ -111,7 +111,7 @@ recycle_if_not <- function(
     .env = caller_env(),
     .error_call = caller_env()) {
   qs <- enexprs(...)
-  restrictr_fn <- caller_name()
+  restrictr_fn <- "recycle_if_not"
 
   validate_env(
     .error_call,
@@ -223,7 +223,7 @@ recycle_expr <- function(
       abort_size_false(
         arg = nm,
         actual_size = eval_tidy(
-          call2(vec_size, sym(nms[i])),
+          call2(vec_size, sym(nm)),
           data = .data,
           env = eval_env
         ),

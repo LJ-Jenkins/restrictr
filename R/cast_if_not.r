@@ -101,7 +101,7 @@ cast_if_not <- function(
     .env = caller_env(),
     .error_call = caller_env()) {
   qs <- enexprs(...)
-  restrictr_fn <- caller_name()
+  restrictr_fn <- "cast_if_not"
 
   validate_env(
     .error_call,

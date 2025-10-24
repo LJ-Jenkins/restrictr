@@ -1,13 +1,24 @@
-prep_restrict_args <- function(args, arg_names, env, error_call, restrictr_fn = "restrict") {
+prep_restrict_args <- function(
+    args,
+    arg_names,
+    env,
+    error_call,
+    restrictr_fn = "restrict") {
   rargs <- list()
   fn_names <- c()
 
-  try_fetch(
+  withCallingHandlers(
     for (i in seq_along(args)) {
       fn_names[i] <- call_name(args[[i]])
     },
     error = function(cnd) {
-      r_call_name_error(arg_names[i], args[[i]], error_call)
+      abort_restrict_args(
+        arg = arg_names[i],
+        allowed = c("validate", "coerce", "cast", "lossy_cast", "recycle"),
+        given = args[[i]],
+        call = error_call,
+        restrictr_fn = restrictr_fn
+      )
     }
   )
 
@@ -29,6 +40,7 @@ prep_restrict_args <- function(args, arg_names, env, error_call, restrictr_fn = 
       given_args$lossy,
       given_args_names,
       fn_names[i],
+      inarg = arg_names[i],
       call = error_call,
       restrictr_fn = restrictr_fn
     )
@@ -43,6 +55,7 @@ prep_restrict_args <- function(args, arg_names, env, error_call, restrictr_fn = 
     validate_bool(
       rargs[[i]]$na_rm,
       arg = "na_rm",
+      inarg = arg_names[i],
       call = error_call,
       restrictr_fn = restrictr_fn
     )

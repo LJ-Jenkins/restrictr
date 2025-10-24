@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Luke", "Jenkins", , "luke.joe.jenkins@gmail.com", role = c("aut", "cre"))
 Description: Tools for function argument validation including options for safe, automatic type casting and size recycling.
-License: MIT + file LICENSE
+License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -16,4 +16,4 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://lj-jenkins.github.io/restrictr/, https://lj-jenkins.github.io/restrictr_test/
+URL: https://lj-jenkins.github.io/restrictr/

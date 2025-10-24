@@ -147,7 +147,7 @@ check_validates <- function(args, mask, arg_name, vnames, env) {
 
     if (!all(logi)) {
       abort_validate_false(
-        vname = vnames[i],
+        vname = vnames[[i]],
         validate = as_label(args$validations[[i]])
       )
     }
