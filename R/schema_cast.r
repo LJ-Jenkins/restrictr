@@ -135,6 +135,7 @@ cast_masked_exprs <- function(
   validate_env(
     .error_call,
     allow_global = TRUE,
+    call = caller_env(2),
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -147,6 +148,7 @@ cast_masked_exprs <- function(
     .size,
     .darg,
     allow_null = TRUE,
+    sname = "`.size`",
     call = .error_call,
     restrictr_fn = restrictr_fn
   )

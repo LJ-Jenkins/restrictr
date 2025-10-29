@@ -16,6 +16,7 @@ prep_restrict_args <- function(
         arg = arg_names[i],
         allowed = c("validate", "coerce", "cast", "lossy_cast", "recycle"),
         given = args[[i]],
+        not_fn = TRUE,
         call = error_call,
         restrictr_fn = restrictr_fn
       )

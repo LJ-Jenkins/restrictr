@@ -24,7 +24,7 @@ cnd_bullets <- function(cnd, restrictr_fn, arg, name = NULL, msg = NULL, mask = 
     NULL = format_inline("{.strong Caused by error in {.fn {restrictr_fn}}}:"),
     "i" = cnd_masked_arg(arg, name, mask),
     "!" = msg %||% if (inherits(cnd, "restrictr_error")) {
-      cnd_body(cnd)
+      unname(cnd_body(cnd))
     } else {
       unname(cnd_header(cnd)) %le0% cnd$message
     },
@@ -78,12 +78,13 @@ cnd_body.restrictr_error_no_args_given <- function(cnd, ...) {
 
 #' @export
 cnd_body.restrictr_error_args_unnamed <- function(cnd, ...) {
-  format_inline("Arguments are not named with objects to {cnd$action} in {qty(cnd$i)}position{?s}: {.var {cnd$i}}.") |> excl()
+  format_inline("Arguments are not named with objects to {cnd$action} in {qty(length(cnd$i))}position{?s} {.var {cnd$i}}.") |> excl()
 }
 
 #' @export
 cnd_body.restrictr_error_size_arg <- function(cnd, ...) {
-  format_inline("Size argument is not {cnd$size_issue}: {cnd$size_given} given.") |> excl()
+  txt <- if (!is.null(cnd$size_issue)) paste("not", cnd$size_issue) else "needs to be scalar integerish"
+  format_inline("{cnd$sname} argument is {cnd$size_given}, {txt}.") |> excl()
 }
 
 #' @export
@@ -113,7 +114,11 @@ cnd_body.restrictr_error_restrict_args <- function(cnd, ...) {
 
 #' @export
 cnd_footer.restrictr_error_restrict_args <- function(cnd, ...) {
-  c("x" = format_inline("Given: {.fn {cnd$arg} = {cnd$given}}."))
+  c("x" = if (!is.null(cnd$not_fn)) {
+    format_inline("Given: {.var {cnd$arg} = {cnd$given}}.")
+  } else {
+    format_inline("Given: {.fn {cnd$arg} = {cnd$given}}.")
+  })
 }
 
 #' @export
@@ -126,7 +131,8 @@ cnd_body.restrictr_error_wrong_class <- function(cnd, ...) {
   if (is.null(cnd$validate)) {
     format_inline("Returned {.cls {cnd$given_class}}, not {.cls {cnd$expected_class}}.")
   } else {
-    format_inline("Validate {.var {cnd$validate}} is of type {.cls {cnd$given_class}}, not {.cls {cnd$expected_class}}.")
+    txt <- if (length(cnd$expected_class) == 1) "returned" else "is of"
+    format_inline("Validate {.var {cnd$validate}} {txt} type {.cls {cnd$given_class}}, not {.cls {cnd$expected_class}}.")
   }
 }
 
@@ -138,7 +144,7 @@ cnd_body.restrictr_error_glue <- function(cnd, ...) {
 #' @export
 cnd_body.restrictr_error_na_present <- function(cnd, ...) {
   if (is.null(cnd$validate)) {
-    "Contains `NA` values and `na_rm` is set to `FALSE`."
+    "Contains `NA` values and `.na_rm` is set to `FALSE`."
   } else {
     format_inline("Validate {.var {cnd$validate}} contains `NA` values and `na_rm` is set to `FALSE`.")
   }

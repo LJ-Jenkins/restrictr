@@ -64,14 +64,15 @@ abort_if_not <- function(
   tf <- enquos(...)
   restrictr_fn <- "abort_if_not"
 
-  validate_env(
-    .error_call,
-    allow_global = TRUE,
-    restrictr_fn = restrictr_fn
-  )
   validate_args_given(
     tf,
     call = .error_call,
+    restrictr_fn = restrictr_fn
+  )
+  validate_env(
+    .error_call,
+    allow_global = TRUE,
+    call = caller_env(),
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -92,6 +93,15 @@ abort_if_not <- function(
     error_call = .error_call,
     restrictr_fn = restrictr_fn
   )
+
+  if (!is.null(.message)) {
+    .message <- glue_chr(
+      .message,
+      eval_env = caller_env(),
+      error_call = .error_call,
+      restrictr_fn = restrictr_fn
+    )
+  }
 
   check_logi_exprs(
     NULL,
@@ -138,6 +148,11 @@ abort_if <- function(
     call = .error_call,
     restrictr_fn = restrictr_fn
   )
+  validate_bool(
+    .na_rm,
+    call = .error_call,
+    restrictr_fn = restrictr_fn
+  )
 
   nms <- glue_names(
     tf,
@@ -145,6 +160,15 @@ abort_if <- function(
     error_call = .error_call,
     restrictr_fn = restrictr_fn
   )
+
+  if (!is.null(.message)) {
+    .message <- glue_chr(
+      .message,
+      eval_env = caller_env(),
+      error_call = .error_call,
+      restrictr_fn = restrictr_fn
+    )
+  }
 
   check_logi_exprs(
     NULL,

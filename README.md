@@ -100,12 +100,13 @@ f <- \(x) {
 `schema`, `schema_cast` and `schema_recycle` provide the same
 functionality for data-masked arguments from data.frames/lists. The size
 of the data.frame/list and whether certain names are present can also be
-checked using the `.names` and `.size` arguments. The data-mask object
-is returned (unaltered for `schema`):
+checked using the `.names` and `.size` arguments. The altered data-mask
+object is returned for `schema_cast` and `schema_recycle` (nothing is
+returned for `schema`):
 
 ``` r
 f <- \(df) {
-  df <- df |>
+  df |>
     schema(x == 1)
 }
 

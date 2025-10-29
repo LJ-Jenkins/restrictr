@@ -137,6 +137,7 @@ check_masked_logi_exprs <- function(
   validate_env(
     .error_call,
     allow_global = TRUE,
+    call = caller_env(2),
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -149,12 +150,18 @@ check_masked_logi_exprs <- function(
     .size,
     .darg,
     allow_null = TRUE,
+    sname = "`.size`",
     call = .error_call,
     restrictr_fn = restrictr_fn
   )
   validate_chr(
     .message,
     allow_null = TRUE,
+    call = .error_call,
+    restrictr_fn = restrictr_fn
+  )
+  validate_bool(
+    .na_rm,
     call = .error_call,
     restrictr_fn = restrictr_fn
   )
@@ -169,12 +176,14 @@ check_masked_logi_exprs <- function(
     )
   }
 
+  eval_env <- caller_env(2)
+
   if (!is.null(.names)) {
     check_names_present(
       .data,
       .names |>
         glue_chr(
-          eval_env = caller_env(2),
+          eval_env = eval_env,
           error_call = .error_call,
           restrictr_fn = restrictr_fn
         ),
@@ -190,10 +199,19 @@ check_masked_logi_exprs <- function(
 
   nms <- glue_names(
     tf,
-    eval_env = caller_env(2),
+    eval_env = eval_env,
     error_call = .error_call,
     restrictr_fn = restrictr_fn
   )
+
+  if (!is.null(.message)) {
+    .message <- glue_chr(
+      .message,
+      eval_env = eval_env,
+      error_call = .error_call,
+      restrictr_fn = restrictr_fn
+    )
+  }
 
   check_logi_exprs(
     .data,

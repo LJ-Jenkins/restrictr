@@ -66,6 +66,7 @@ validate_size_arg <- function(
     size,
     arg,
     allow_null = FALSE,
+    sname = "Size",
     call = NULL,
     restrictr_fn = NULL) {
   if (allow_null && is.null(size)) {
@@ -76,6 +77,7 @@ validate_size_arg <- function(
     abort_size_arg(
       size_issue = format_inline("{.cls numeric}"),
       size_given = format_inline("{.cls {class(size)}}"),
+      sname = sname,
       call = call,
       restrictr_fn = restrictr_fn
     )
@@ -83,8 +85,8 @@ validate_size_arg <- function(
 
   if (!is_scalar_integerish(size)) {
     abort_size_arg(
-      size_issue = "is not a scalar integerish value",
       size_given = length_or_obj(size),
+      sname = sname,
       call = call,
       restrictr_fn = restrictr_fn
     )

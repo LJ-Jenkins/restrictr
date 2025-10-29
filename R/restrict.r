@@ -162,6 +162,12 @@ restrict <- function(
     restrictr_fn = restrictr_fn
   )
   validate_env(
+    .error_call,
+    allow_global = TRUE,
+    call = caller_env(),
+    restrictr_fn = restrictr_fn
+  )
+  validate_env(
     .env,
     call = .error_call,
     restrictr_fn = restrictr_fn
