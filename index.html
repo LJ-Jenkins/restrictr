@@ -131,10 +131,10 @@
 <span><span class="co"># Caused by error in `cast_if_not()`:</span></span>
 <span><span class="co"># ℹ In argument: `x = integer()`.</span></span>
 <span><span class="co"># ! Can't convert `x` &lt;character&gt; to &lt;integer&gt;.</span></span></code></pre></div>
-<p><code>schema</code>, <code>schema_cast</code> and <code>schema_recycle</code> provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the <code>.names</code> and <code>.size</code> arguments. The data-mask object is returned (unaltered for <code>schema</code>):</p>
+<p><code>schema</code>, <code>schema_cast</code> and <code>schema_recycle</code> provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the <code>.names</code> and <code>.size</code> arguments. The altered data-mask object is returned for <code>schema_cast</code> and <code>schema_recycle</code> (nothing is returned for <code>schema</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="reference/schema.html">schema</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
