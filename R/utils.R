@@ -4,20 +4,6 @@
 
 `%le0%` <- function(lhs, rhs) if (length(lhs) != 0) lhs else rhs
 
-prmask <- function(mask) {
-  mask %!||% format_inline(" for data mask {.var {mask}}")
-}
-
-r_prmask <- function(arg, mask) {
-  format_inline(
-    if (is.na(mask)) {
-      "Invalid validation for {.var {arg}}:"
-    } else {
-      "Invalid validation for {.var {arg}} in data mask {.var {mask}}:"
-    }
-  )
-}
-
 length_or_obj <- function(x) {
   format_inline(
     if (length(x) > 1) {
@@ -66,8 +52,3 @@ restrict_list_c <- function(li, names, new_name = "validations") {
 ptype_show <- function(.x) {
   gsub("Prototype: ", "", capture.output(vec_ptype_show(.x)))
 }
-
-# caller_name <- function(n = 1) {
-#   x <- caller_call(n)
-#   paste0(call_ns(x) %!||% paste0(call_ns(x), "::"), call_name(x))
-# }

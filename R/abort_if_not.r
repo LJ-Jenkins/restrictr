@@ -63,6 +63,7 @@ abort_if_not <- function(
     .error_call = caller_env()) {
   tf <- enquos(...)
   restrictr_fn <- "abort_if_not"
+  eval_env <- caller_env()
 
   validate_args_given(
     tf,
@@ -72,7 +73,7 @@ abort_if_not <- function(
   validate_env(
     .error_call,
     allow_global = TRUE,
-    call = caller_env(),
+    call = eval_env,
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -89,7 +90,7 @@ abort_if_not <- function(
 
   nms <- glue_names(
     tf,
-    eval_env = caller_env(),
+    eval_env = eval_env,
     error_call = .error_call,
     restrictr_fn = restrictr_fn
   )
@@ -97,7 +98,7 @@ abort_if_not <- function(
   if (!is.null(.message)) {
     .message <- glue_chr(
       .message,
-      eval_env = caller_env(),
+      eval_env = eval_env,
       error_call = .error_call,
       restrictr_fn = restrictr_fn
     )
@@ -115,11 +116,6 @@ abort_if_not <- function(
   )
 }
 
-# #' @rdname abort_if_not
-# #' @usage NULL
-# #' @export
-# abortifnot <- abort_if_not
-
 #' @rdname abort_if_not
 #' @usage NULL
 #' @export
@@ -130,6 +126,7 @@ abort_if <- function(
     .error_call = caller_env()) {
   tf <- enquos(...)
   restrictr_fn <- "abort_if"
+  eval_env <- caller_env()
 
   validate_args_given(
     tf,
@@ -139,7 +136,7 @@ abort_if <- function(
   validate_env(
     .error_call,
     allow_global = TRUE,
-    call = caller_env(),
+    call = eval_env,
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -156,7 +153,7 @@ abort_if <- function(
 
   nms <- glue_names(
     tf,
-    eval_env = caller_env(),
+    eval_env = eval_env,
     error_call = .error_call,
     restrictr_fn = restrictr_fn
   )
@@ -164,7 +161,7 @@ abort_if <- function(
   if (!is.null(.message)) {
     .message <- glue_chr(
       .message,
-      eval_env = caller_env(),
+      eval_env = eval_env,
       error_call = .error_call,
       restrictr_fn = restrictr_fn
     )

@@ -133,11 +133,12 @@ check_masked_logi_exprs <- function(
     .error_call,
     restrictr_fn = NULL) {
   tf <- enquos(...)
+  eval_env <- caller_env(2)
 
   validate_env(
     .error_call,
     allow_global = TRUE,
-    call = caller_env(2),
+    call = eval_env,
     restrictr_fn = restrictr_fn
   )
   validate_chr(
@@ -175,8 +176,6 @@ check_masked_logi_exprs <- function(
       restrictr_fn = restrictr_fn
     )
   }
-
-  eval_env <- caller_env(2)
 
   if (!is.null(.names)) {
     check_names_present(
