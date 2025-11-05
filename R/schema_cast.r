@@ -28,7 +28,7 @@
 #' a non-data-masked version of casting. [restrictr::restrict] can also
 #' be used for type casting, size recycling, and validation.
 #' @return Object `.data`, with named elements cast to the desired type. Also
-#' attaches class "with_schema" and attribute "schema" containing the
+#' attaches class `with_schema` and attribute `schema` containing the
 #' schema_cast call to be enforced later.
 #' @export
 #' @examples

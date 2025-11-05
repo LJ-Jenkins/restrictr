@@ -59,8 +59,8 @@ Can be a glue string.}
 \item{.darg}{the argument name of \code{.data} to use in error messages.}
 }
 \value{
-.data is returned with attached class "with_schema" and
-attribute "schema" containing the schema call to be enforced later.
+.data is returned with attached class \code{with_schema} and
+attribute \code{schema} containing the schema call to be enforced later.
 }
 \description{
 If any of the expressions in \code{...}, evaluated within the data mask
@@ -68,9 +68,9 @@ If any of the expressions in \code{...}, evaluated within the data mask
 not all \code{TRUE}, \link[rlang:abort]{rlang::abort} is called for the first expression
 which was not (\link{all}) \code{TRUE}. The \code{.names} and \code{.size} arguments
 can be used to check for given names and size of the
-data.frame/list. The checking of size is from the \link{vctrs}
-(https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size}) and
-thus applies \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}.
+data.frame/list. The checking of size is from the \href{https://vctrs.r-lib.org/}{vctrs}
+package (using \link[vctrs:vec_size]{vctrs::vec_size}) and thus applies
+\href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}.
 }
 \details{
 See \link{schema_cast} and \link{schema_recycle} for

@@ -36,7 +36,7 @@ the \code{.data} data.frame/list must have.}
 }
 \value{
 Object \code{.data}, with named elements recycled to the desired size.
-Also attaches class "with_schema" and attribute "schema" containing the
+Also attaches class \code{with_schema} and attribute \code{schema} containing the
 schema_recycle call to be enforced later.
 }
 \description{
@@ -45,9 +45,9 @@ If any of the expressions in \code{...}, evaluated within the data mask
 not of the same size, then the data element attempts to be recycled to
 the size specified in the expression. The \code{.names} and \code{.size}
 arguments can be used to check for given names and size of the
-list. The checking of size and the recycling are from the \link{vctrs}
-(https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size} and
-\link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus apply the \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}
+list. The checking of size and the recycling are from the \href{https://vctrs.r-lib.org/}{vctrs}
+package (using \link[vctrs:vec_size]{vctrs::vec_size} and \link[vctrs:vec_recycle]{vctrs::vec_recycle})
+and thus apply the \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}
 and \href{https://vctrs.r-lib.org/reference/theory-faq-recycling.html}{vctrs recycling rules}.
 }
 \details{

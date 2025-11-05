@@ -50,7 +50,7 @@ the \code{.data} data.frame/list must have.}
 }
 \value{
 Object \code{.data}, with named elements cast to the desired type. Also
-attaches class "with_schema" and attribute "schema" containing the
+attaches class \code{with_schema} and attribute \code{schema} containing the
 schema_cast call to be enforced later.
 }
 \description{

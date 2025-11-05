@@ -5,9 +5,9 @@
 #' not of the same size, then the data element attempts to be recycled to
 #' the size specified in the expression. The `.names` and `.size`
 #' arguments can be used to check for given names and size of the
-#' list. The checking of size and the recycling are from the [vctrs]
-#' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size] and
-#' [vctrs::vec_recycle]) and thus apply the [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html)
+#' list. The checking of size and the recycling are from the [vctrs](https://vctrs.r-lib.org/)
+#' package (using [vctrs::vec_size] and [vctrs::vec_recycle])
+#' and thus apply the [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html)
 #' and [vctrs recycling rules](https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
 #'
 #' @param .data a list to use as the data mask.
@@ -26,7 +26,7 @@
 #' for a non-data-masked version of recycling. [restrictr::restrict]
 #' can also be used for type casting, size recycling, and validation.
 #' @return Object `.data`, with named elements recycled to the desired size.
-#' Also attaches class "with_schema" and attribute "schema" containing the
+#' Also attaches class `with_schema` and attribute `schema` containing the
 #' schema_recycle call to be enforced later.
 #' @export
 #' @examples

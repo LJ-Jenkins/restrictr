@@ -18,7 +18,7 @@ enforce_schema(.data, ...)
 \item{.data}{a data.frame or list containing an attached schema (of
 class \code{with_schema}).}
 
-\item{...}{for future extensions - leave blank.}
+\item{...}{for future extensions - leave empty.}
 
 \item{.error_call}{the call environment to use for error messages
 (passed to \link[rlang:abort]{rlang::abort}).}

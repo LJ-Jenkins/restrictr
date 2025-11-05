@@ -5,7 +5,7 @@
 #'
 #' @param .data a data.frame or list containing an attached schema (of
 #' class `with_schema`).
-#' @param ... for future extensions - leave blank.
+#' @param ... for future extensions - leave empty.
 #' @param .error_call the call environment to use for error messages
 #' (passed to [rlang::abort]).
 #' @param .darg the argument name of `.data` to use in error messages.

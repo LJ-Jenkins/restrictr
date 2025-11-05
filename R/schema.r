@@ -5,9 +5,9 @@
 #' not all `TRUE`, [rlang::abort] is called for the first expression
 #' which was not ([all]) `TRUE`. The `.names` and `.size` arguments
 #' can be used to check for given names and size of the
-#' data.frame/list. The checking of size is from the [vctrs]
-#' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size]) and
-#' thus applies [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html).
+#' data.frame/list. The checking of size is from the [vctrs](https://vctrs.r-lib.org/)
+#' package (using [vctrs::vec_size]) and thus applies
+#' [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html).
 #'
 #' @param .data a data.frame or list to use as the data mask.
 #' @param ... any number of R expressions to be evaluated using `.data`
@@ -33,8 +33,8 @@
 #' the desired type/size. See [restrictr::abort_if_not] for a non-data-masked
 #' version of this function. [restrictr::restrict] can also be used for
 #' type casting, size recycling, and validation.
-#' @return .data is returned with attached class "with_schema" and
-#' attribute "schema" containing the schema call to be enforced later.
+#' @return .data is returned with attached class `with_schema` and
+#' attribute `schema` containing the schema call to be enforced later.
 #' @export
 #' @examples
 #' # NB: Some of these examples are expected to produce an error. To

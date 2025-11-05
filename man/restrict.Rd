@@ -54,9 +54,8 @@ These functions accept the named arguments \code{type}, \code{size} and \code{ma
 the \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_assert]{vctrs::vec_is} and
 \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \href{https://vctrs.r-lib.org/reference/faq-compatibility-types.html}{vctrs type conversion rules}.
 \item \code{size}: a positive scalar integerish value specifying the desired size.
-The size checking and recycling are done using the \link{vctrs}
-(https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size} and
-\link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus stick to
+The size checking and recycling are done using the \href{https://vctrs.r-lib.org/}{vctrs}
+package (using \link[vctrs:vec_size]{vctrs::vec_size} and \link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus stick to
 the \href{https://vctrs.r-lib.org/reference/theory-faq-recycling.html}{vctrs recycling rules}.
 \item \code{mask}: the name of an optional data frame or list (found within the \code{.env}
 environment) to use as a data mask for evaluations.
@@ -69,9 +68,9 @@ logical. \code{restrict} first evaluates type, then size, then the validations.
 Any change from the prior expression is reflected in subsequent
 expressions, i.e. if an object is cast to a new type then that new type is
 used for the size check and validations.
-If you do not wish to use the \link{vctrs}
-(https://vctrs.r-lib.org/) type/size checking, then instead only give
-validations such as \code{~ is.integer(.x)} and \code{~ length(.x) == 1}.
+If you do not wish to use the \href{https://vctrs.r-lib.org/}{vctrs}
+type/size checking, then instead only give validations such as
+\code{~ is.integer(.x)} and \code{~ length(.x) == 1}.
 However, these will only validate, not cast or recycle.
 \code{restrict} is designed for the checking of numerous objects, for a
 smaller number of objects to check see \link{abort_if_not},

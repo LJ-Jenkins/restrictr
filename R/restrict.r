@@ -26,9 +26,8 @@
 #' the [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_is] and
 #' [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules](https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
 #' - `size`: a positive scalar integerish value specifying the desired size.
-#' The size checking and recycling are done using the [vctrs]
-#' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size] and
-#' [vctrs::vec_recycle]) and thus stick to
+#' The size checking and recycling are done using the [vctrs](https://vctrs.r-lib.org/)
+#' package (using [vctrs::vec_size] and [vctrs::vec_recycle]) and thus stick to
 #' the [vctrs recycling rules](https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
 #' - `mask`: the name of an optional data frame or list (found within the `.env`
 #' environment) to use as a data mask for evaluations.
@@ -40,9 +39,9 @@
 #' Any change from the prior expression is reflected in subsequent
 #' expressions, i.e. if an object is cast to a new type then that new type is
 #' used for the size check and validations.
-#' If you do not wish to use the [vctrs]
-#' (https://vctrs.r-lib.org/) type/size checking, then instead only give
-#' validations such as `~ is.integer(.x)` and `~ length(.x) == 1`.
+#' If you do not wish to use the [vctrs](https://vctrs.r-lib.org/)
+#' type/size checking, then instead only give validations such as
+#' `~ is.integer(.x)` and `~ length(.x) == 1`.
 #' However, these will only validate, not cast or recycle.
 #' `restrict` is designed for the checking of numerous objects, for a
 #' smaller number of objects to check see [restrictr::abort_if_not],
