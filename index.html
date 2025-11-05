@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Function Argument Validation and Coercion">
-<meta name="description" content="Tools for function argument validation including options for safe, automatic type casting and size recycling.">
-<meta property="og:description" content="Tools for function argument validation including options for safe, automatic type casting and size recycling.">
+<meta name="description" content="Tools for function argument validation that focus on clear error messaging and include options for safe, automatic type casting and size recycling.">
+<meta property="og:description" content="Tools for function argument validation that focus on clear error messaging and include options for safe, automatic type casting and size recycling.">
 <meta property="og:image" content="https://lj-jenkins.github.io/restrictr_test/logo.png">
 </head>
 <body>
@@ -52,7 +52,7 @@
 </div>
 <!-- badges: start -->
 
-<p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments. Note: This package is still in the development stage and is subject to change.</p>
+<p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments.</p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -65,6 +65,8 @@
 <code><a href="reference/schema.html">schema()</a></code> for the validation of named elements of data.frames/lists.</li>
 <li>
 <code><a href="reference/schema_cast.html">schema_cast()</a></code> and <code><a href="reference/schema_recycle.html">schema_recycle()</a></code> for the safe type casting and recycling of named elements of data.frames/lists.</li>
+<li>
+<code><a href="reference/enforce_schema.html">enforce_schema()</a></code> to reapply the attached schema from the above functions.</li>
 <li>
 <code><a href="reference/restrict.html">restrict()</a></code> for validation, safe type casting and safe recycling of both variables and named elements of data.frames/lists.</li>
 </ul>
@@ -92,17 +94,17 @@
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(1L, list(x = 1))</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `abort_if_not()`:</span></span>
-<span><span class="co"># ℹ In argument: `is.character(x)`.</span></span>
-<span><span class="co"># ! Returned `FALSE`.</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fl">1L</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `abort_if_not()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `is.character(x)`.</span></span>
+<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
 <span></span>
-<span><span class="co"># f("hi", list(x = 1))</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `abort_if_not()`:</span></span>
-<span><span class="co"># ℹ In argument: `nchar(x) &gt; 5`.</span></span>
-<span><span class="co"># ! `hi` is too short!</span></span></code></pre></div>
+<span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `abort_if_not()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `nchar(x) &gt; 5`.</span></span>
+<span><span class="co">#&gt; ! `hi` is too short!</span></span></code></pre></div>
 <p><code>cast_if_not</code> and <code>recycle_if_not</code> provide safe casting and recycling from <a href="https://vctrs.r-lib.org/" class="external-link">vctrs</a>. Variables are provided on the left hand side and the expected type/size is provided on the right. Assignment is automatically done back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
@@ -113,9 +115,9 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(5L, 1)</span></span>
-<span><span class="co"># [1] "numeric"</span></span>
-<span><span class="co"># [1] 5</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fl">5L</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "numeric"</span></span>
+<span><span class="co">#&gt; [1] 5</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/cast_if_not.html">cast_if_not</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, .lossy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -123,26 +125,26 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(1.5)</span></span>
-<span><span class="co"># [1] 1</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
 <span></span>
-<span><span class="co"># f("hi")</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `cast_if_not()`:</span></span>
-<span><span class="co"># ℹ In argument: `x = integer()`.</span></span>
-<span><span class="co"># ! Can't convert `x` &lt;character&gt; to &lt;integer&gt;.</span></span></code></pre></div>
-<p><code>schema</code>, <code>schema_cast</code> and <code>schema_recycle</code> provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the <code>.names</code> and <code>.size</code> arguments. The altered data-mask object is returned for <code>schema_cast</code> and <code>schema_recycle</code> (nothing is returned for <code>schema</code>):</p>
+<span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `cast_if_not()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `x = integer()`.</span></span>
+<span><span class="co">#&gt; ! Can't convert `x` &lt;character&gt; to &lt;integer&gt;.</span></span></code></pre></div>
+<p><code>schema</code>, <code>schema_cast</code> and <code>schema_recycle</code> provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the <code>.names</code> and <code>.size</code> arguments. The altered data-mask object is returned with an attached class <code>with_schema</code> which is used by <code><a href="reference/enforce_schema.html">enforce_schema()</a></code> to reapply the original schema call:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="reference/schema.html">schema</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(data.frame(x = 2))</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `schema()`:</span></span>
-<span><span class="co"># ℹ In argument: `x == 1` for data mask `df`.</span></span>
-<span><span class="co"># ! Returned `FALSE`.</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `schema()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `x == 1` for data mask `df`.</span></span>
+<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
@@ -151,8 +153,8 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(data.frame(x = 1L))</span></span>
-<span><span class="co"># [1] "numeric"</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "numeric"</span></span>
 <span></span>
 <span><span class="co"># schema_recycle is only implemented for lists.</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">li</span><span class="op">)</span> <span class="op">{</span></span>
@@ -162,9 +164,33 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="va">li</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(list(x = 1, y = 1, z = 1))</span></span>
-<span><span class="co"># x y z</span></span>
-<span><span class="co"># 3 5 3</span></span></code></pre></div>
+<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="fl">1</span>, z <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; x y z </span></span>
+<span><span class="co">#&gt; 3 5 3</span></span>
+<span></span>
+<span><span class="co"># enforce_schema reapplies the original call.</span></span>
+<span><span class="va">li</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span></span>
+<span><span class="va">li_with_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/schema.html">schema</a></span><span class="op">(</span><span class="va">li</span>, <span class="va">x</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">li_with_schema</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">li_with_schema</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error:</span></span>
+<span><span class="co">#&gt; Caused by error in `enforce_schema()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `is.character(y)` for data mask `li_with_schema`.</span></span>
+<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">df_with_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/schema_cast.html">schema_cast</a></span><span class="op">(</span><span class="va">df</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, .lossy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">df_with_schema</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">df_with_schema</span><span class="op">)</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span></span>
+<span><span class="va">li_with_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/schema_recycle.html">schema_recycle</a></span><span class="op">(</span><span class="va">li</span>, x <span class="op">=</span> <span class="fl">2</span>, y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">li_with_schema</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="st">"hi"</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">li_with_schema</span><span class="op">)</span><span class="op">$</span><span class="va">y</span></span>
+<span><span class="co">#&gt; [1] "hi" "hi" "hi"</span></span></code></pre></div>
 <p><code>restrict</code> combines all functionality into a multi-purpose tool. Both variables and named elements within data.frames/lists can be validated and casted/recycled. They keyword functions of <code>validate</code>, <code>cast</code>, <code>lossy_cast</code>, <code>recycle</code> and <code>coerce</code> determines whether any type casting and/or recycling occurs. Validation functions can then be given, either in the form of functions or lambdas. Assignment occurs back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>). A contradictory example just to show features:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span>, <span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -183,30 +209,31 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"`x` lossily casted to"</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"and recycled using value of `df$x` to length"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(data.frame(x = 3L), 1.5)</span></span>
-<span><span class="co"># `df$x` casted to numeric from the initial `x` class</span></span>
-<span><span class="co"># `x` lossily casted to integer and recycled using value of `df$x` to 3</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span>, <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `df$x` casted to numeric from the initial `x` class </span></span>
+<span><span class="co">#&gt; `x` lossily casted to integer and recycled using value of `df$x` to length 3</span></span>
 <span></span>
 <span><span class="co">#-- vctrs type/size rules are for all `cast`, `recycle` and `coerce` calls within restrictr functions</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/restrict.html">restrict</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fu">validate</span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(data.frame(x = 1L, y = "hi"))</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `restrict()`:</span></span>
-<span><span class="co"># ℹ In argument: `df`.</span></span>
-<span><span class="co"># ! Returned &lt;data.frame&lt;/ x: integer/ y: character/&gt;&gt;, not &lt;data.frame&lt;/ x: integer/ y: double/&gt;&gt;.</span></span>
+<span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span>, y <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `restrict()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `df`.</span></span>
+<span><span class="co">#&gt; ! Returned &lt;data.frame&lt;/ x: integer/ y: character/&gt;&gt;, not &lt;data.frame&lt;/ x:</span></span>
+<span><span class="co">#&gt;   integer/ y: double/&gt;&gt;.</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/restrict.html">restrict</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">recycle</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># f(1:5)</span></span>
-<span><span class="co"># Error in `f()`:</span></span>
-<span><span class="co"># Caused by error in `restrict()`:</span></span>
-<span><span class="co"># ℹ In argument: `x`.</span></span>
-<span><span class="co"># ! Can't recycle `x` (size 5) to size 10.</span></span></code></pre></div>
+<span><span class="fu">f</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `f()`:</span></span>
+<span><span class="co">#&gt; Caused by error in `restrict()`:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `x`.</span></span>
+<span><span class="co">#&gt; ! Can't recycle `x` (size 5) to size 10.</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h3>
