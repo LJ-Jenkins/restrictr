@@ -44,11 +44,20 @@ glue_names <- function(obj, eval_env, error_call, restrictr_fn) {
 restrict_list_c <- function(li, names, new_name = "validations") {
   c(
     li[names %in% c("type", "size", "mask", "lossy", "na_rm")],
-    set_names(list(li[!names %in% c("type", "size", "mask", "lossy", "na_rm")]), new_name)
+    set_names(
+      list(li[!names %in% c("type", "size", "mask", "lossy", "na_rm")]),
+      new_name
+    )
   )
 }
 
 #' @importFrom utils capture.output
 ptype_show <- function(.x) {
   gsub("Prototype: ", "", capture.output(vec_ptype_show(.x)))
+}
+
+#' @export
+print.with_schema <- function(x, ...) {
+  attr(x, "schema") <- NULL
+  NextMethod()
 }

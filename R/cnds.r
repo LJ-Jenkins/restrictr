@@ -19,7 +19,13 @@ cnd_masked_arg <- function(arg, name, mask) {
   )
 }
 
-cnd_bullets <- function(cnd, restrictr_fn, arg, name = NULL, msg = NULL, mask = NULL) {
+cnd_bullets <- function(
+    cnd,
+    restrictr_fn,
+    arg,
+    name = NULL,
+    msg = NULL,
+    mask = NULL) {
   c(
     NULL = format_inline("{.strong Caused by error in {.fn {restrictr_fn}}}:"),
     "i" = cnd_masked_arg(arg, name, mask),
@@ -83,7 +89,7 @@ cnd_body.restrictr_error_args_unnamed <- function(cnd, ...) {
 
 #' @export
 cnd_body.restrictr_error_size_arg <- function(cnd, ...) {
-  txt <- if (!is.null(cnd$size_issue)) paste("not", cnd$size_issue) else "needs to be scalar integerish"
+  txt <- if (!is.null(cnd$size_issue)) paste("not", cnd$size_issue) else "needs to be positive scalar integerish"
   format_inline("{cnd$sname} argument is {cnd$size_given}, {txt}.") |> excl()
 }
 

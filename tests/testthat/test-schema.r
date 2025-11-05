@@ -142,3 +142,25 @@ test_that("schema_recycle checks", {
   li <- schema_recycle(li, x = vctrs::vec_size(.env$y))
   expect_identical(lengths(li), c(x = 10L, y = 1L))
 })
+
+test_that("enforce_schema checks", {
+  txt <- "wowza"
+  li <- list(x = 1, y = "hi")
+  li2 <- schema(li, "{txt}" = x == 1)
+  li2$x <- 2
+  expect_error(enforce_schema(li2), regexp = "wowza")
+
+  li2 <- schema_cast(li, x = integer(), .lossy = TRUE)
+  li2$x <- 1.5
+  li2 <- enforce_schema(li2)
+  expect_identical(class(li2$x), "integer")
+
+  li2 <- schema_cast(li, y = character())
+  li2$y <- 5
+  expect_error(enforce_schema(li2), regexp = "Can't convert `y` <double> to <character>.")
+
+  li2 <- schema_recycle(li, x = 2, y = 3)
+  li2$y <- "hi"
+  li2 <- enforce_schema(li2)
+  expect_identical(lengths(li2), c(x = 2L, y = 3L))
+})

@@ -8,7 +8,7 @@ validate_env <- function(
   }
   if (!allow_global) {
     if (identical(env, globalenv())) {
-      abort_global_env(call = call)
+      abort_global_env(call = call, restrictr_fn = restrictr_fn)
     }
   }
 }
@@ -20,7 +20,12 @@ validate_bool <- function(
     call = NULL,
     restrictr_fn = NULL) {
   if (!is_bool(bool)) {
-    abort_bool(bool = arg, inarg = inarg, call = call, restrictr_fn = restrictr_fn)
+    abort_bool(
+      bool = arg,
+      inarg = inarg,
+      call = call,
+      restrictr_fn = restrictr_fn
+    )
   }
 }
 
@@ -83,7 +88,7 @@ validate_size_arg <- function(
     )
   }
 
-  if (!is_scalar_integerish(size)) {
+  if (!is_scalar_integerish(size) || size < 1) {
     abort_size_arg(
       size_given = length_or_obj(size),
       sname = sname,

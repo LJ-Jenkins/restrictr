@@ -9,8 +9,7 @@
 <!-- badges: end -->
 
 restrictr provides tools for the validation and safe type
-coercion/recycling of function arguments. Note: This package is still in
-the development stage and is subject to change.
+coercion/recycling of function arguments.
 
 ## Overview
 
@@ -20,6 +19,8 @@ the development stage and is subject to change.
 - `schema()` for the validation of named elements of data.frames/lists.
 - `schema_cast()` and `schema_recycle()` for the safe type casting and
   recycling of named elements of data.frames/lists.
+- `enforce_schema()` to reapply the attached schema from the above
+  functions.
 - `restrict()` for validation, safe type casting and safe recycling of
   both variables and named elements of data.frames/lists.
 
@@ -48,17 +49,17 @@ f <- \(x, y) {
   )
 }
 
-# f(1L, list(x = 1))
-# Error in `f()`:
-# Caused by error in `abort_if_not()`:
-# ℹ In argument: `is.character(x)`.
-# ! Returned `FALSE`.
+f(1L, list(x = 1))
+#> Error in `f()`:
+#> Caused by error in `abort_if_not()`:
+#> ℹ In argument: `is.character(x)`.
+#> ! Returned `FALSE`.
 
-# f("hi", list(x = 1))
-# Error in `f()`:
-# Caused by error in `abort_if_not()`:
-# ℹ In argument: `nchar(x) > 5`.
-# ! `hi` is too short!
+f("hi", list(x = 1))
+#> Error in `f()`:
+#> Caused by error in `abort_if_not()`:
+#> ℹ In argument: `nchar(x) > 5`.
+#> ! `hi` is too short!
 ```
 
 `cast_if_not` and `recycle_if_not` provide safe casting and recycling
@@ -77,9 +78,9 @@ f <- \(x, y) {
   print(length(y))
 }
 
-# f(5L, 1)
-# [1] "numeric"
-# [1] 5
+f(5L, 1)
+#> [1] "numeric"
+#> [1] 5
 
 f <- \(x) {
   cast_if_not(x = integer(), .lossy = TRUE)
@@ -87,22 +88,22 @@ f <- \(x) {
   print(x)
 }
 
-# f(1.5)
-# [1] 1
+f(1.5)
+#> [1] 1
 
-# f("hi")
-# Error in `f()`:
-# Caused by error in `cast_if_not()`:
-# ℹ In argument: `x = integer()`.
-# ! Can't convert `x` <character> to <integer>.
+f("hi")
+#> Error in `f()`:
+#> Caused by error in `cast_if_not()`:
+#> ℹ In argument: `x = integer()`.
+#> ! Can't convert `x` <character> to <integer>.
 ```
 
 `schema`, `schema_cast` and `schema_recycle` provide the same
 functionality for data-masked arguments from data.frames/lists. The size
 of the data.frame/list and whether certain names are present can also be
 checked using the `.names` and `.size` arguments. The altered data-mask
-object is returned for `schema_cast` and `schema_recycle` (nothing is
-returned for `schema`):
+object is returned with an attached class `with_schema` which is used by
+`enforce_schema()` to reapply the original schema call:
 
 ``` r
 f <- \(df) {
@@ -110,11 +111,11 @@ f <- \(df) {
     schema(x == 1)
 }
 
-# f(data.frame(x = 2))
-# Error in `f()`:
-# Caused by error in `schema()`:
-# ℹ In argument: `x == 1` for data mask `df`.
-# ! Returned `FALSE`.
+f(data.frame(x = 2))
+#> Error in `f()`:
+#> Caused by error in `schema()`:
+#> ℹ In argument: `x == 1` for data mask `df`.
+#> ! Returned `FALSE`.
 
 f <- \(df) {
   df <- df |>
@@ -123,8 +124,8 @@ f <- \(df) {
   print(class(df$x))
 }
 
-# f(data.frame(x = 1L))
-# [1] "numeric"
+f(data.frame(x = 1L))
+#> [1] "numeric"
 
 # schema_recycle is only implemented for lists.
 f <- \(li) {
@@ -134,9 +135,33 @@ f <- \(li) {
   print(lengths(li))
 }
 
-# f(list(x = 1, y = 1, z = 1))
-# x y z
-# 3 5 3
+f(list(x = 1, y = 1, z = 1))
+#> x y z 
+#> 3 5 3
+
+# enforce_schema reapplies the original call.
+li <- list(x = 1, y = "hi")
+li_with_schema <- schema(li, x == 1, is.character(y))
+li_with_schema$y <- 1
+
+enforce_schema(li_with_schema)
+#> Error:
+#> Caused by error in `enforce_schema()`:
+#> ℹ In argument: `is.character(y)` for data mask `li_with_schema`.
+#> ! Returned `FALSE`.
+
+df <- data.frame(x = 1:2)
+df_with_schema <- schema_cast(df, x = integer(), .lossy = TRUE)
+df_with_schema$x <- c(1.5, 2.5)
+
+enforce_schema(df_with_schema)$x
+#> [1] 1 2
+
+li_with_schema <- schema_recycle(li, x = 2, y = 3)
+li_with_schema$y <- "hi"
+
+enforce_schema(li_with_schema)$y
+#> [1] "hi" "hi" "hi"
 ```
 
 `restrict` combines all functionality into a multi-purpose tool. Both
@@ -166,30 +191,31 @@ f <- \(df, x) {
   cat("`x` lossily casted to", class(x), "and recycled using value of `df$x` to length", length(x))
 }
 
-# f(data.frame(x = 3L), 1.5)
-# `df$x` casted to numeric from the initial `x` class
-# `x` lossily casted to integer and recycled using value of `df$x` to 3
+f(data.frame(x = 3L), 1.5)
+#> `df$x` casted to numeric from the initial `x` class 
+#> `x` lossily casted to integer and recycled using value of `df$x` to length 3
 
 #-- vctrs type/size rules are for all `cast`, `recycle` and `coerce` calls within restrictr functions
 f <- \(df) {
   restrict(df = validate(type = data.frame(x = integer(), y = double())))
 }
 
-# f(data.frame(x = 1L, y = "hi"))
-# Error in `f()`:
-# Caused by error in `restrict()`:
-# ℹ In argument: `df`.
-# ! Returned <data.frame</ x: integer/ y: character/>>, not <data.frame</ x: integer/ y: double/>>.
+f(data.frame(x = 1L, y = "hi"))
+#> Error in `f()`:
+#> Caused by error in `restrict()`:
+#> ℹ In argument: `df`.
+#> ! Returned <data.frame</ x: integer/ y: character/>>, not <data.frame</ x:
+#>   integer/ y: double/>>.
 
 f <- \(x) {
   restrict(x = recycle(size = 10))
 }
 
-# f(1:5)
-# Error in `f()`:
-# Caused by error in `restrict()`:
-# ℹ In argument: `x`.
-# ! Can't recycle `x` (size 5) to size 10.
+f(1:5)
+#> Error in `f()`:
+#> Caused by error in `restrict()`:
+#> ℹ In argument: `x`.
+#> ! Can't recycle `x` (size 5) to size 10.
 ```
 
 ### Notes

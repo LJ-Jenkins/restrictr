@@ -4,60 +4,83 @@
 \alias{schema}
 \alias{schema.data.frame}
 \alias{schema.list}
-\title{Ensure data.frame/list elements conform to a given schema}
+\title{Ensure the truth of data-masked R expressions}
 \usage{
 schema(.data, ...)
 
 \method{schema}{data.frame}(
   .data,
   ...,
+  .na_rm = FALSE,
   .names = NULL,
   .size = NULL,
   .message = NULL,
-  .na_rm = FALSE,
-  .error_call = caller_env()
+  .error_call = caller_env(),
+  .darg = caller_arg(.data)
 )
 
 \method{schema}{list}(
   .data,
   ...,
+  .na_rm = FALSE,
   .names = NULL,
   .size = NULL,
   .message = NULL,
-  .na_rm = FALSE,
-  .error_call = caller_env()
+  .error_call = caller_env(),
+  .darg = caller_arg(.data)
 )
 }
 \arguments{
-\item{.data}{a data.frame or list to check the schema of.}
+\item{.data}{a data.frame or list to use as the data mask.}
 
 \item{...}{any number of R expressions to be evaluated using \code{.data}
-as a data-mask, which should each evaluate to (a logical vector of all)
-\code{TRUE} for no error to occur.}
+as a data mask, which should each evaluate to (a logical vector of \link{all})
+\code{TRUE} for no error to occur. Positive numbers are not \code{TRUE}, even
+when they are coerced to \code{TRUE} inside \verb{if()} or in arithmetic
+computations in R. If the expressions are named, the names will be
+used in the error message. Names support \link{rlang injection}
+(https://rlang.r-lib.org/reference/topic-inject.html) and \link{glue}
+(https://glue.tidyverse.org/) interpreted string literals.}
+
+\item{.na_rm}{if \code{TRUE}, NA values are removed in the logical vectors
+before evaluation.}
 
 \item{.names}{optional character vector of names which must be
-present in the data.frame/list.}
+present in the \code{.data} data.frame/list. Can be a glue string.}
 
-\item{.size}{optional scalar integerish value for the size of that
-the data.frame/list must have.}
+\item{.size}{optional positive scalar integerish value for the size that
+the \code{.data} data.frame/list must have.}
 
-\item{.message}{single default error message for non-named expressions.}
+\item{.message}{single default error message for non-named expressions.
+Can be a glue string.}
 
-\item{.na_rm}{if TRUE, NA values are removed in the logical vectors (default is FALSE)}
+\item{.error_call}{the call environment to use for error messages
+(passed to \link[rlang:abort]{rlang::abort}).}
 
-\item{.error_call}{the call environment to use for the error (passed to \link[rlang:abort]{rlang::abort}).}
+\item{.darg}{the argument name of \code{.data} to use in error messages.}
+}
+\value{
+.data is returned with attached class "with_schema" and
+attribute "schema" containing the schema call to be enforced later.
 }
 \description{
-If any of the data-masked expressions in \code{...} are not all \code{TRUE},
-\link[rlang:abort]{rlang::abort} is called for the first expression which was not
-(all) \code{TRUE}. \code{.names} and \code{.size} arguments can be used to check for
-given names and size of the data.frame/list. The checking of size is from
-the \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_size]{vctrs::vec_size}) and
-thus applies vctrs size rules.
+If any of the expressions in \code{...}, evaluated within the data mask
+\code{.data} (see \href{rlang::args_data_masking}{rlang data masking}), are
+not all \code{TRUE}, \link[rlang:abort]{rlang::abort} is called for the first expression
+which was not (\link{all}) \code{TRUE}. The \code{.names} and \code{.size} arguments
+can be used to check for given names and size of the
+data.frame/list. The checking of size is from the \link{vctrs}
+(https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size}) and
+thus applies \link{vctrs size rules}
+(https://vctrs.r-lib.org/articles/type-size.html).
 }
 \details{
-\link[=schema_cast]{schema_cast} and \link[=schema_recycle]{schema_recycle}
-are versions of \code{schema()} that attempt to coerce the data to the desired schema.
+See \href{restrictr::schema_cast}{schema_cast} and \link{schema_recycle}
+(restrictr::schema_recycle) for versions of \code{schema()} that attempt
+to coerce named elements of the data to the desired type/size. See
+\href{restrictr::abort_if_not}{abort_if_not} for a non-data-masked version
+of this function. \href{restrictr::restrict}{restrict} can also be used for
+type casting, size recycling, and validation.
 }
 \examples{
 # NB: Some of these examples are expected to produce an error. To
@@ -65,48 +88,71 @@ are versions of \code{schema()} that attempt to coerce the data to the desired s
 #     piped into a call to try().
 
 li <- list(x = 1, y = "hi", z = \(x) x > 1)
-li |>
-  schema(x == 1, is.character(y), is.function(z)) # all TRUE
+li <- schema(li, x == 1, is.character(y), is.function(z)) # all TRUE
 
-li |>
-  schema(x == 1, is.numeric(y)) |>
-  try()
-# => Error: Argument `is.numeric(y)` for data mask `.data` returned `FALSE`.
+schema(li, x == 1, is.numeric(y)) |> try()
+# Error:
+# Caused by error in `schema()`:
+# ℹ In argument: `is.numeric(y)` for data mask `li`.
+# ! Returned `FALSE`.
 
-li |>
-  schema(length(x)) |>
-  try()
-# => Error: Expression `length(x)` for object `.data` must evaluate to class
-# <logical> not <integer>.
-# even when if(1) "ok" works
-
-# The default error message can be overridden to be more informative:
-df <- data.frame(a = 1L:3L, b = c("x", "y", "z"))
-df |>
-  schema("a must be double" = is.double(a)) |>
-  try()
-# => Error: a must be double
+# A custom error message can be given for each expression:
+schema(li, "y must be numeric, check input" = is.numeric(y)) |> try()
+# Error:
+# Caused by error in `schema()`:
+# ℹ In argument: `is.numeric(y)` for data mask `li`.
+# ! y must be numeric, check input
 
 # Alternatively, one error message can be used for all expressions:
-df |>
-  schema(
-    is.integer(a),
-    !grepl("x", b),
-    .message = "a must be integer and b cannot contain 'x'."
-  ) |>
-  try()
-# => Error: a must be integer and b cannot contain 'x'.
+schema(
+  li,
+  x == 1, is.character(y), is.integer(z),
+  .message = "li is invalid, check input"
+) |> try()
+# Error:
+# Caused by error in `schema()`:
+# ℹ In argument: `is.integer(z)` for data mask `li`.
+# ! li is invalid, check input
 
-# injection and glue can be used to supply expressions, names, and messages:
-x <- "my error"
-schema(df, "{x}" = FALSE) |> try()
-# => Error: my error
-y <- FALSE
-schema(df, {{ x }} := !!y) |> try()
-# => Error: my error
-schema(df, !!x := !is.character(b)) |> try()
-# => Error: my error
-x <- list("my error" = FALSE)
-schema(df, !!!x) |> try()
-# => Error: my error
+# Option to remove NA values before checking:
+df <- data.frame(x = c(5, NA, 10))
+df <- schema(df, x > 4, .na_rm = TRUE) # no error
+
+# `.names` and `.size` arguments can be used to check that given names
+# are present and that the data has the desired (vctrs) size:
+schema(li, .names = c("a", "x", "y", "b")) |> try()
+# Error:
+# Caused by error in `schema()`.
+# ! Named elements `a` and `b` not found in data mask `li`.
+
+schema(li, .size = 5) |> try()
+# Error:
+# Caused by error in `schema()`.
+# ! Object `li` is of vctrs size `3`, not `5`.
+
+# The `.error_call` argument can be used to specify where the error occurs,
+# by default this is the caller environment.
+myfunc <- function(df, ...) schema(df, ...)
+myfunc(df, x > 4) |> try()
+# Error in `myfunc()`:
+# Caused by error in `schema()`:
+# ℹ In argument: `x > 4` for data mask `df`.
+# ! Contains `NA` values and `.na_rm` is set to `FALSE`.
+
+# Injection and glue can be used:
+y <- "my error"
+schema(li, "{y}" = x == 2) |> try()
+schema(li, {{ y }} := x == 2) |> try()
+schema(li, !!y := x == 2) |> try()
+schema(li, x == 2, .message = "{y}") |> try()
+# Error:
+# Caused by error in `schema()`:
+# ℹ In argument: `x == 2` for data mask `li`.
+# ! my error
+y <- list("my bang-bang-bang error" = rlang::expr(x == 2))
+schema(li, !!!y) |> try()
+# Error:
+# Caused by error in `schema()`:
+# ℹ In argument: `x == 2` for data mask `li`.
+# ! my bang-bang-bang error
 }

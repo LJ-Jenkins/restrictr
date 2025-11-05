@@ -2,94 +2,129 @@
 #' validation functions/formulas.
 #'
 #' This function takes any number of named expressions referring to objects
-#' in the given environment, checking and possibly coercing them to the specified
-#' type and/or size, and also checking them against any number of validation
-#' functions/formulas. Using the function keywords of `validate`, `cast`,
-#' `lossy_cast`, `recycle`, and `coerce` within the expressions allows for
-#' different behaviours:
+#' in the environment specified by the `.env` argument, checking and possibly
+#' coercing them to the specified type and/or size, and also checking them
+#' against any number of validation functions/formulas. Using the function
+#' keywords of `validate`, `cast`, `lossy_cast`, `recycle`, and `coerce`
+#' within the expressions allows for different behaviours:
 #' - `validate`: checks that the object is of the specified type/size and
 #' adheres to the validations, throwing an error if not.
-#' - `cast`: differs from validate by checking that the object is of the
-#' specified type, and if not attempts to cast it to that type
-#' (throwing an error if not possible).
-#' - `lossy_cast`: differs from `cast` by allowing lossy casting
-#' (e.g. double to integer).
-#' - `recycle`: differs from `validate` by checking that the object is of
-#' the specified size, and if not attempts to recycle it to that size
-#' (throwing an error if not possible).
-#' - `coerce`: differs from `validate` by checking both the type and size,
-#' and attempting to cast and/or recycle it to that type/size
-#' (throwing an error if not possible). Casting is not lossy by default but
-#' can be made lossy by adding `lossy = TRUE` within the `coerce()` call.
+#' - `cast`: differs from `validate` by attempting to cast the object if it
+#' is not of the specified type.
+#' - `lossy_cast`: differs from `cast` by allowing lossy casting.
+#' - `recycle`: differs from `validate` by attempting to recycle the object
+#' if it is not of the specified size.
+#' - `coerce`: differs from `validate` by attempting to cast and/or recycle
+#' the object if it is not of the specified type and/or size. Casting is
+#' not lossy by default but can be made lossy by adding `lossy = TRUE`
+#' within the `coerce()` call.
 #'
 #' These functions accept the named arguments `type`, `size` and `mask`
 #' (`lossy` is also accepted within `coerce()`):
 #' - `type`: an R object of the desired type (e.g. `integer()`, `double()`,
 #' `character()`, `list()`). The type checking and casting are done using
 #' the [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_is] and
-#' [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules](https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
-#' - `size`: a scalar integerish value specifying the desired size. The size
-#' checking and recycling are done using the [vctrs](https://vctrs.r-lib.org/)
-#' package (using [vctrs::vec_size] and [vctrs::vec_recycle]) and thus stick to
-#' the [vctrs recycling rules](https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
-#' - `mask`: an optional data frame or list to use as a data mask for
-#' evaluations. Expressions are evaluated using [rlang::eval_tidy] with
-#' the `data` argument set to the mask and the `env` argument set to the
-#' environment specified by the `.env` argument to `restrict()`.
-#' The mask must be present within the environment.
-#' - `na_rm`: if TRUE, NA values are removed in the logical vectors from the validations before evaluating (default is FALSE).
+#' [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules]
+#' (https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+#' - `size`: a positive scalar integerish value specifying the desired size.
+#' The size checking and recycling are done using the [vctrs]
+#' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size] and
+#' [vctrs::vec_recycle]) and thus stick to
+#' the [vctrs recycling rules]
+#' (https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+#' - `mask`: the name of an optional data frame or list (found within the `.env`
+#' environment) to use as a data mask for evaluations.
+#' - `na_rm`: if `TRUE`, NA values are removed in the logical vectors
+#' before evaluation.
 #'
-#' All other inputs should be unnamed validations: either expressions or formulas
-#' (that evaluate to logical). `restrict` first evaluates type, then size, then the
-#' validations. Any change from the prior expression is reflected in subsequent
+#' All other inputs should be validation functions or formulas that evaluate to
+#' logical. `restrict` first evaluates type, then size, then the validations.
+#' Any change from the prior expression is reflected in subsequent
 #' expressions, i.e. if an object is cast to a new type then that new type is
 #' used for the size check and validations.
-#' If you do not wish to use the [vctrs](https://vctrs.r-lib.org/) type/size checking,
-#' then instead give validations functions such as `~ is.integer(.x)`.
+#' If you do not wish to use the [vctrs]
+#' (https://vctrs.r-lib.org/) type/size checking, then instead only give
+#' validations such as `~ is.integer(.x)` and `~ length(.x) == 1`.
 #' However, these will only validate, not cast or recycle.
-#' `restrict` is designed for the checking of numerous objects, for a smaller number of
-#' objects to check see the [restrictr::abort_if_not], [restrictr::cast_if_not],
-#' [restrictr::recycle_if_not], [restrictr::schema], [restrictr::schema_cast] and
-#' [restrictr::schema_recycle] functions.
+#' `restrict` is designed for the checking of numerous objects, for a
+#' smaller number of objects to check see [restrictr::abort_if_not],
+#' [restrictr::cast_if_not],[restrictr::recycle_if_not],
+#' [restrictr::schema], [restrictr::schema_cast] and
+#' [restrictr::schema_recycle].
 #'
-#' @param ... any number of named R expressions, with the names referring to objects
-#' in the environment specified by the `.env` argument, and the expressions built
-#' using the functions: `validate()`, `cast()`, `lossy_cast()`, `recycle()`, and `coerce()`.
-#' @param .env the environment to use for the evaluation of the expressions & the
-#' (possible) assignment of the variables. Cannot be the global environment.
-#' @param .error_call the call environment to use for the error (passed to [rlang::abort]).
+#' @param ... any number of named R expressions, with the names referring to
+#' objects in the environment specified by the `.env` argument, and the
+#' expressions built using the functions: `validate()`, `cast()`,
+#' `lossy_cast()`, `recycle()`, and `coerce()`.
+#' @param .env the environment to use for the evaluation of the
+#' casting/recycling/validation expressions and the assignment of altered
+#' objects. Cannot be the global environment.
+#' @param .error_call the call environment to use for error messages
+#' (passed to [rlang::abort]).
+#' @return NULL, but objects named in `...` will be changed in the
+#' `.env` environment specified.
 #' @export
 #' @examples
-#' # Will not alter the global environment so most examples here are wrapped with local().
+#' # NB: Will not alter the global environment so examples
+#' #     here are wrapped with local(). Some of these examples
+#' #     are also expected to produce an error so are piped to try().
+#'
 #' x <- 1L
 #' restrict(x = validate(type = integer())) |> try()
-#' # => Error : Argument `.env` cannot be the global environment.
+#' # Error:
+#' # Caused by error in `recycle_if_not()`.
+#' # ! `env` must not be the global environment.
 #'
+#' # Functions used within restrict() determine behaviour:
 #' local({
 #'   x <- 1L
-#'   restrict(x = coerce(type = double(), size = 3))
+#'   # validate() for validations only.
+#'   restrict(x = validate(type = integer(), size = 1, ~ .x < 5))
+#'
+#'   # cast() for validations and type casting (lossy_cast() for lossy casting).
+#'   restrict(x = cast(type = double(), size = 1, ~ .x < 5))
+#'   class(x) |> print()
+#'
+#'   # recycle() for validations and size recycling.
+#'   restrict(x = recycle(type = double(), size = 3, ~ .x < 5))
+#'   length(x) |> print()
+#'
+#'   # coerce() for validations, type casting and size recycling.
+#'   x <- 1L
+#'   restrict(x = coerce(type = double(), size = 3, ~ .x < 5))
 #'   cat(class(x), length(x), sep = ", ")
 #' })
+#' # "numeric"
+#' # 3
+#' # numeric, 3
 #'
+#' # By default, lossy casting is not allowed:
 #' local({
 #'   x <- 1.5
 #'   restrict(x = cast(type = integer())) |> try()
 #' })
-#' # => Error : Can't convert from `x` <double> to <integer> due to loss of precision.
+#' # Error:
+#' # Caused by error in `restrict()`:
+#' # ℹ In argument: `x`.
+#' # ! Can't convert from `x` <double> to <integer> due to loss of precision.
+#' # • Locations: 1
 #'
+#' # Allow lossy casting using lossy_cast() or coerce() with `lossy = TRUE`:
 #' local({
 #'   x <- 1.5
 #'   restrict(x = lossy_cast(type = integer()))
-#'   cat(x, class(x), sep = ", ")
+#'   cat(class(x), ", ", sep = "")
 #'
 #'   # or
 #'
 #'   x <- 1.5
 #'   restrict(x = coerce(type = integer(), lossy = TRUE))
-#'   cat(x, class(x), sep = ", ")
+#'   cat(class(x))
 #' })
+#' # integer, integer
 #'
-#' # other objects can be used as the type to cast to or size to recycle to, e.g.:
+#' # Other objects can be used as the type to cast to or size to
+#' # recycle to, e.g.:
 #' local({
 #'   x <- 1L
 #'   y <- 2.3
@@ -97,6 +132,7 @@
 #'   restrict(x = coerce(type = y, size = z))
 #'   cat(class(x), length(x), sep = ", ")
 #' })
+#' # numeric, 3
 #'
 #' # restrict works sequentially, so references to objects will be
 #' # after they have been evaluated:
@@ -108,22 +144,37 @@
 #'   )
 #'   cat(class(x), class(y), sep = ", ")
 #' })
+#' # numeric, numeric
 #'
-#' # numerous validations can be given and type and size checking can be done
-#' # within if base R checking is preferred:
+#' # Multiple validations can be given and type and size checking can be done
+#' # within if base R checking is preferred (no coercion will occur):
 #' local({
 #'   x <- 1L
 #'   restrict(
 #'     x = validate(
 #'       ~ is.integer(.x),
 #'       ~ length(.x) == 1,
-#'       \(y) all(y > 0),
-#'       \(z) !is.character(z)
+#'       \(.x) all(.x > 0),
+#'       \(.x) !is.character(.x)
 #'     )
 #'   )
 #' })
 #'
-#' # the `.env` argument determines the expression and assignment environment:
+#' # Validations can be named for clearer error messages:
+#' local({
+#'   x <- c(1, -2, 3)
+#'   restrict(
+#'     x = validate(
+#'       "x must be positive" = \(.x) all(.x > 0),
+#'     )
+#'   ) |> try()
+#' })
+#' # Error:
+#' # Caused by error in `restrict()`:
+#' # ℹ In argument: `x`.
+#' # ! x must be positive
+#'
+#' # The `.env` argument determines the expression and assignment environment:
 #' local({
 #'   x <- 1L
 #'   e <- new.env()
@@ -131,24 +182,74 @@
 #'   restrict(x = cast(type = 1.5), .env = e)
 #'   cat(class(e$x), class(x), sep = ", ")
 #' })
+#' # numeric, integer
 #'
-#' # names (lhs) are checked to be in the `.env` environment, throwing an error if not found:
+#' # Named objects (lhs) are checked to be in the `.env` environment,
+#' # throwing an error if not found:
 #' local({
 #'   x <- 1L
 #'   e <- new.env()
 #'   restrict(x = cast(type = 1.5), .env = e) |> try()
 #' })
-#' # => Error: Objects `x` are not found in the `.env` environment specified.
+#' # Error:
+#' # Caused by error in `restrict()`:
+#' # ℹ In argument: `x`.
+#' # ! Object `x` is not found in the `.env` environment specified.
 #'
-#' # for expressions (rhs), the `.env` argument is preferentially chosen, but if not found
-#' # then the normal R scoping rules apply:
+#' # For expressions (rhs), the `.env` argument is preferentially chosen,
+#' # but if not found then the normal R scoping rules apply:
 #' local({
 #'   x <- 1.5
 #'   e <- new.env()
 #'   e$z <- 1L
-#'   restrict(x = cast(type = x), .env = e) |> try()
-#'   cat(class(e$z))
+#'   restrict(z = cast(type = x), .env = e) |> try()
+#'   class(e$z)
 #' })
+#' # "numeric"
+#'
+#' # the `mask` argument within the functions can be used to
+#' # restrict objects within a data mask:
+#' local({
+#'   df <- data.frame(a = 1L:3L, b = c("x", "y", "z"))
+#'   restrict(
+#'     a = cast(type = double(), ~ .x > 0, mask = df),
+#'     b = validate(type = character(), ~ nchar(.x) == 1, mask = df)
+#'   )
+#'   class(df$a)
+#' })
+#' # "numeric"
+#'
+#' # The `.error_call` argument can be used to specify where the error occurs,
+#' # by default this is the caller environment.
+#' myfunc <- function(x) restrict(x = validate(size = -5))
+#' myfunc(1) |> try()
+#' # Error in `myfunc()`:
+#' # Caused by error in `restrict()`:
+#' # ℹ In argument: `x`.
+#' # ! Size argument is `-5`, needs to be positive scalar integerish.
+#'
+#' # Injection and glue can be used:
+#' local({
+#'   x <- 1L
+#'   x_name <- "x"
+#'   x_list <- list(x = rlang::expr(validate(type = integer())))
+#'   restrict(
+#'     "{x_name}" = validate(type = integer()),
+#'     !!x_name := validate(type = integer()),
+#'     {{ x_name }} := validate(type = integer()),
+#'     !!!x_list
+#'   )
+#' })
+#'
+#' local({
+#'   df <- data.frame(x = 1L)
+#'   x_txt <- "my glue error message"
+#'   restrict(x = validate("{x_txt}" = ~ .x != 1, mask = df)) |> try()
+#' })
+#' # Error:
+#' # Caused by error in `restrict()`:
+#' # ℹ In argument: `x` for data mask `df`.
+#' # ! my glue error message
 restrict <- function(
     ...,
     .env = caller_env(),
@@ -226,13 +327,14 @@ restrict <- function(
       mask <- check_coerce_size(args, mask, arg, .env)
 
       if (length(args$validations) > 0) {
-        check_validates(args, mask, arg, vnames, .env)
+        check_validates(args, mask, arg, vnames[[i]], .env)
       }
 
       # non-masked objects are evaluated in the .env environment
       # but masked objects are altered within restrict
       # assign mask object back here if exists and not a validate call
-      # may switch to altered in its own .env like in old versions of restrictr in future
+      # may switch to altered in its own .env like in old versions of
+      # restrictr in future
       if (!inherits(args, "validate") && !is.null(args$mask)) {
         mask %!||% assign(args$mask, mask, pos = .env)
       }

@@ -14,7 +14,8 @@ schema_cast(.data, ...)
   .lossy = FALSE,
   .names = NULL,
   .size = NULL,
-  .error_call = caller_env()
+  .error_call = caller_env(),
+  .darg = caller_arg(.data)
 )
 
 \method{schema_cast}{list}(
@@ -23,40 +24,56 @@ schema_cast(.data, ...)
   .lossy = FALSE,
   .names = NULL,
   .size = NULL,
-  .error_call = caller_env()
+  .error_call = caller_env(),
+  .darg = caller_arg(.data)
 )
 }
 \arguments{
-\item{.data}{a data.frame or list to check the types schema of.}
+\item{.data}{a data.frame or list to use as the data mask.}
 
-\item{...}{any number of \code{\link[rlang:args_data_masking]{data-masking}}
-name-value pairs to be evaluated using \code{.data} as a data-mask.
-Should follow the format of \code{name = expected_type()},
+\item{...}{any number of R expressions to be evaluated using \code{.data}
+as a data mask. Should follow the format of \code{named_element = expected_type},
 e.g, \code{var_x = integer()} or \code{var_x = var_y}.}
 
-\item{.lossy}{logical, if \code{TRUE} allow \link[vctrs:vctrs-conditions]{lossy casts}.}
+\item{.lossy}{if \code{TRUE}, \href{vctrs::allow_lossy_cast}{lossy casting} is
+undertaken.}
 
 \item{.names}{optional character vector of names which must be
-present in the data.frame/list.}
+present in the \code{.data} data.frame/list. Can be a glue string.}
 
-\item{.size}{optional scalar integerish value for the size that
-the data.frame/list must have.}
+\item{.size}{optional positive scalar integerish value for the size that
+the \code{.data} data.frame/list must have.}
 
-\item{.error_call}{the call environment to use for the error (passed to \link[rlang:abort]{rlang::abort}).}
+\item{.error_call}{the call environment to use for error messages
+(passed to \link[rlang:abort]{rlang::abort}).}
+
+\item{.darg}{the argument name of \code{.data} to use in error messages.}
+}
+\value{
+Object \code{.data}, with named elements cast to the desired type. Also
+attaches class "with_schema" and attribute "schema" containing the
+schema_cast call to be enforced later.
 }
 \description{
-If any of the data-masked named expressions in \code{...} are not of the same type,
-then the object attempts to be cast to the type specified in the expression.
-\code{.names} and \code{.size} arguments can be used to check for given names and size
-of the data.frame/list. The checking of type and the type conversion are from the
+If any of the expressions in \code{...}, evaluated within the data mask
+\code{.data} (see \href{rlang::args_data_masking}{rlang data masking}), are
+not of the same type, then the data element attempts to be cast to
+the type specified in the expression. The \code{.names} and \code{.size}
+arguments can be used to check for given names and size of the
+data.frame/list. The checking of type and the type conversion are from the
 \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_assert]{vctrs::vec_is}
-and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \href{https://vctrs.r-lib.org/reference/faq-compatibility-types.html}{vctrs type conversion rules}.
+and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \link{vctrs type conversion rules}
+(https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
 The checking of size is also from \href{https://vctrs.r-lib.org/}{vctrs}
-(using \link[vctrs:vec_size]{vctrs::vec_size}) and thus applies vctrs size rules.
+(using \link[vctrs:vec_size]{vctrs::vec_size}) and thus applies \link{vctrs size rules}
+(https://vctrs.r-lib.org/articles/type-size.html).
 }
 \details{
-See also \link[=schema]{schema} and \link[=schema_recycle]{schema_recycle},
-as well as \link[=cast_if_not]{cast_if_not} for a non-data-masked version of casting.
+See \href{restrictr::schema}{schema} and \link{schema_recycle}
+(restrictr::schema_recycle) for validation and recycling, as well as
+\href{restrictr::cast_if_not}{cast_if_not} for a non-data-masked version
+of casting. \href{restrictr::restrict}{restrict} can also be used for
+type casting, size recycling, and validation.
 }
 \examples{
 # NB: Some of these examples are expected to produce an error. To
@@ -64,49 +81,55 @@ as well as \link[=cast_if_not]{cast_if_not} for a non-data-masked version of cas
 #     piped into a call to try().
 
 li <- list(x = 1.1, y = "hi", z = 1L:2L)
-# input remains the same if types match
-li |>
-  schema_cast(x = double(), y = character(), z = integer()) |>
-  lapply(class)
+# Input remains the same if types match
+li <- schema_cast(li, x = double(), y = character(), z = integer())
 
-li |>
-  schema_cast(y = numeric()) |>
-  try()
-# => Error: Can't convert `y` <character> to <double>.
+# By default, lossy casting is not allowed:
+schema_cast(li, x = integer()) |> try()
+# Error:
+# Caused by error in `schema_cast()`:
+# ℹ In argument: `x = integer()` for data mask `li`.
+# ! Can't convert from `x` <double> to <integer> due to loss of precision.
+# • Locations: 1
 
-li |>
-  schema_cast(x = z) |>
-  try()
-# => Error: Can't convert from `x` <double> to <integer> due to loss of precision.
+# Lossy casting can be enabled with the `.lossy` argument:
+schema_cast(li, x = integer(), .lossy = TRUE)$x
 
-# with lossy casting
-li |>
-  schema_cast(x = z, .lossy = TRUE) |>
-  lapply(class)
+# Other objects can be used as the type to cast to, e.g.:
+schema_cast(li, z = x)$z |> class()
 
-# schema_cast works sequentially with quosures, so references to objects will be
+# schema_cast() works sequentially, so references to objects will be
 # after they have been evaluated:
 li$a <- 1L
-li |>
-  schema_cast(z = x, a = z) |>
-  lapply(class)
+schema_cast(li, z = double(), a = z)$a |> class()
 
-li |>
-  schema_cast(x = numeric(), .size = 5) |>
-  try()
-# => Error: Object `li` must have vctrs size `5`, not `4`.
+# `.names` and `.size` arguments can be used to check that given names
+# are present and that the data has the desired (vctrs) size:
+schema_cast(li, .names = c("a", "x", "y", "b")) |> try()
+# Error:
+# Caused by error in `schema_cast()`.
+# ! Named elements `a` and `b` not found in data mask `li`.
 
-li |>
-  schema_cast(x = numeric(), .names = c("x", "p")) |>
-  try()
-# => Error: Names `p` not found in `li`.
+schema_cast(li, .size = 5) |> try()
+# Error:
+# Caused by error in `schema_cast()`.
+# ! Object `li` is of vctrs size `3`, not `5`.
 
-# injection and glue can be used to supply expressions, names, and messages:
-li <- list(x = 1L, z = 5.5)
+# The `.error_call` argument can be used to specify where the error occurs,
+# by default this is the caller environment.
+myfunc <- function(li, ...) schema_cast(li, ...)
+myfunc(li, x = character()) |> try()
+# Error in `myfunc()`:
+# Caused by error in `schema_cast()`:
+# ℹ In argument: `x = character()` for data mask `li`.
+# ! Can't convert `x` <double> to <character>.
+
+# Injection and glue can be used:
+li <- list(x = 1L)
 x_name <- "x"
-schema_cast(li, !!x_name := z) |>
-  lapply(class)
-xg_name <- "{x_name}"
-schema_cast(li, {{ xg_name }} := character()) |> try()
-# => Error: Can't convert `x` <integer> to <character>.
+schema_cast(li, "{x_name}" = double())
+schema_cast(li, !!x_name := double())
+schema_cast(li, {{ x_name }} := double())
+x_list <- list(x = double())
+schema_cast(li, !!!x_list)
 }
