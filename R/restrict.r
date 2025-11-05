@@ -24,14 +24,12 @@
 #' - `type`: an R object of the desired type (e.g. `integer()`, `double()`,
 #' `character()`, `list()`). The type checking and casting are done using
 #' the [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_is] and
-#' [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules]
-#' (https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+#' [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules](https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
 #' - `size`: a positive scalar integerish value specifying the desired size.
 #' The size checking and recycling are done using the [vctrs]
 #' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size] and
 #' [vctrs::vec_recycle]) and thus stick to
-#' the [vctrs recycling rules]
-#' (https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+#' the [vctrs recycling rules](https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
 #' - `mask`: the name of an optional data frame or list (found within the `.env`
 #' environment) to use as a data mask for evaluations.
 #' - `na_rm`: if `TRUE`, NA values are removed in the logical vectors

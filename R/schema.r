@@ -1,14 +1,13 @@
 #' Ensure the truth of data-masked R expressions
 #'
 #' If any of the expressions in `...`, evaluated within the data mask
-#' `.data` (see [rlang data masking](rlang::args_data_masking)), are
+#' `.data` (see [rlang::args_data_masking]), are
 #' not all `TRUE`, [rlang::abort] is called for the first expression
 #' which was not ([all]) `TRUE`. The `.names` and `.size` arguments
 #' can be used to check for given names and size of the
 #' data.frame/list. The checking of size is from the [vctrs]
 #' (https://vctrs.r-lib.org/) package (using [vctrs::vec_size]) and
-#' thus applies [vctrs size rules]
-#' (https://vctrs.r-lib.org/articles/type-size.html).
+#' thus applies [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html).
 #'
 #' @param .data a data.frame or list to use as the data mask.
 #' @param ... any number of R expressions to be evaluated using `.data`
@@ -16,9 +15,8 @@
 #' `TRUE` for no error to occur. Positive numbers are not `TRUE`, even
 #' when they are coerced to `TRUE` inside `if()` or in arithmetic
 #' computations in R. If the expressions are named, the names will be
-#' used in the error message. Names support [rlang injection]
-#' (https://rlang.r-lib.org/reference/topic-inject.html) and [glue]
-#' (https://glue.tidyverse.org/) interpreted string literals.
+#' used in the error message. Names support [rlang injection](https://rlang.r-lib.org/reference/topic-inject.html)
+#' and [glue](https://glue.tidyverse.org/) interpreted string literals.
 #' @param .na_rm if `TRUE`, NA values are removed in the logical vectors
 #' before evaluation.
 #' @param .names optional character vector of names which must be
@@ -30,11 +28,10 @@
 #' @param .error_call the call environment to use for error messages
 #' (passed to [rlang::abort]).
 #' @param .darg the argument name of `.data` to use in error messages.
-#' @details See [schema_cast](restrictr::schema_cast) and [schema_recycle]
-#' (restrictr::schema_recycle) for versions of `schema()` that attempt
-#' to coerce named elements of the data to the desired type/size. See
-#' [abort_if_not](restrictr::abort_if_not) for a non-data-masked version
-#' of this function. [restrict](restrictr::restrict) can also be used for
+#' @details See [restrictr::schema_cast] and [restrictr::schema_recycle] for
+#' versions of `schema()` that attempt to coerce named elements of the data to
+#' the desired type/size. See [restrictr::abort_if_not] for a non-data-masked
+#' version of this function. [restrictr::restrict] can also be used for
 #' type casting, size recycling, and validation.
 #' @return .data is returned with attached class "with_schema" and
 #' attribute "schema" containing the schema call to be enforced later.

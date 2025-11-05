@@ -28,8 +28,7 @@ size specified in the expression. Expressions are evaluated and
 objects are assigned into the environment specified by the \code{.env}
 argument. The checking of size and the recycling are from the
 \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_size]{vctrs::vec_size}
-and \link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus stick to the \link{vctrs recycling rules}
-(https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+and \link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus stick to the \href{https://vctrs.r-lib.org/reference/theory-faq-recycling.html}{vctrs recycling rules}.
 }
 \examples{
 # NB: Will not alter the global environment so examples

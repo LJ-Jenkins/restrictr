@@ -35,9 +35,8 @@ For objects with an attached schema (from \link{schema}, \link{schema_cast}, or
 \link{schema_recycle}), enforce the schema on the object.
 }
 \details{
-See \href{restrictr::schema}{schema}, \link{schema_cast}
-(restrictr::schema_cast) and \href{restrictr::schema_recycle}{schema_recycle} for
-creating and attaching a schema.
+See \link{schema}, \link{schema_cast}
+and \link{schema_recycle} for creating and attaching a schema.
 }
 \examples{
 # NB: Some of these examples are expected to produce an error. To

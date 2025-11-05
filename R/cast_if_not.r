@@ -6,13 +6,11 @@
 #' objects are assigned into the environment specified by the `.env`
 #' argument. The checking of type and the type conversion are from
 #' the [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_is]
-#' and [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules]
-#' (https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+#' and [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules](https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
 #'
 #' @param ... any number of named R expressions, in the form of:
 #' `name_of_object_to_cast = object_of_type_to_cast_to`
-#' @param .lossy if `TRUE`, [lossy casting](vctrs::allow_lossy_cast) is
-#' undertaken.
+#' @param .lossy if `TRUE`, lossy casting is undertaken.
 #' @param .env the environment to use for the evaluation of the casting
 #' expressions and the assignment of the casted objects. Cannot be
 #' the global environment.

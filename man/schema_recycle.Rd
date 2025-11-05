@@ -41,22 +41,20 @@ schema_recycle call to be enforced later.
 }
 \description{
 If any of the expressions in \code{...}, evaluated within the data mask
-\code{.data} (see \href{rlang::args_data_masking}{rlang data masking}), are
+\code{.data} (see \link[rlang:args_data_masking]{rlang::args_data_masking}), are
 not of the same size, then the data element attempts to be recycled to
 the size specified in the expression. The \code{.names} and \code{.size}
 arguments can be used to check for given names and size of the
 list. The checking of size and the recycling are from the \link{vctrs}
 (https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size} and
-\link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus apply the \link{vctrs size rules}
-(https://vctrs.r-lib.org/articles/type-size.html) and \link{vctrs recycling rules}
-(https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+\link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus apply the \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}
+and \href{https://vctrs.r-lib.org/reference/theory-faq-recycling.html}{vctrs recycling rules}.
 }
 \details{
-See \href{restrictr::schema}{schema} and \link{schema_cast}
-(restrictr::schema_cast) for validation and casting, as well as
-\href{restrictr::recycle_if_not}{recycle_if_not} for a non-data-masked version
-of recycling. \href{restrictr::restrict}{restrict} can also be used for
-type casting, size recycling, and validation.
+See \link{schema} and \link{schema_cast}
+for validation and casting, as well as \link{recycle_if_not}
+for a non-data-masked version of recycling. \link{restrict}
+can also be used for type casting, size recycling, and validation.
 }
 \examples{
 # NB: Some of these examples are expected to produce an error. To

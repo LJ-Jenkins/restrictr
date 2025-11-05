@@ -9,9 +9,8 @@
 #' @param .error_call the call environment to use for error messages
 #' (passed to [rlang::abort]).
 #' @param .darg the argument name of `.data` to use in error messages.
-#' @details See [schema](restrictr::schema), [schema_cast]
-#' (restrictr::schema_cast) and [schema_recycle](restrictr::schema_recycle) for
-#' creating and attaching a schema.
+#' @details See [restrictr::schema], [restrictr::schema_cast]
+#' and [restrictr::schema_recycle] for creating and attaching a schema.
 #' @return Object `.data`, with no change if attached schema is from `schema`,
 #' or with named elements cast or recycled to the desired type/size if
 #' attached schema is from `schema_cast` or `schema_recycle` respectively.
@@ -89,7 +88,6 @@ enforce_schema.with_schema <- function(
   )
 }
 
-#' @export
 dispatch_schema <- function(
     schema,
     .data,

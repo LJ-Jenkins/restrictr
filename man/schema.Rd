@@ -38,9 +38,8 @@ as a data mask, which should each evaluate to (a logical vector of \link{all})
 \code{TRUE} for no error to occur. Positive numbers are not \code{TRUE}, even
 when they are coerced to \code{TRUE} inside \verb{if()} or in arithmetic
 computations in R. If the expressions are named, the names will be
-used in the error message. Names support \link{rlang injection}
-(https://rlang.r-lib.org/reference/topic-inject.html) and \link{glue}
-(https://glue.tidyverse.org/) interpreted string literals.}
+used in the error message. Names support \href{https://rlang.r-lib.org/reference/topic-inject.html}{rlang injection}
+and \href{https://glue.tidyverse.org/}{glue} interpreted string literals.}
 
 \item{.na_rm}{if \code{TRUE}, NA values are removed in the logical vectors
 before evaluation.}
@@ -65,21 +64,19 @@ attribute "schema" containing the schema call to be enforced later.
 }
 \description{
 If any of the expressions in \code{...}, evaluated within the data mask
-\code{.data} (see \href{rlang::args_data_masking}{rlang data masking}), are
+\code{.data} (see \link[rlang:args_data_masking]{rlang::args_data_masking}), are
 not all \code{TRUE}, \link[rlang:abort]{rlang::abort} is called for the first expression
 which was not (\link{all}) \code{TRUE}. The \code{.names} and \code{.size} arguments
 can be used to check for given names and size of the
 data.frame/list. The checking of size is from the \link{vctrs}
 (https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size}) and
-thus applies \link{vctrs size rules}
-(https://vctrs.r-lib.org/articles/type-size.html).
+thus applies \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}.
 }
 \details{
-See \href{restrictr::schema_cast}{schema_cast} and \link{schema_recycle}
-(restrictr::schema_recycle) for versions of \code{schema()} that attempt
-to coerce named elements of the data to the desired type/size. See
-\href{restrictr::abort_if_not}{abort_if_not} for a non-data-masked version
-of this function. \href{restrictr::restrict}{restrict} can also be used for
+See \link{schema_cast} and \link{schema_recycle} for
+versions of \code{schema()} that attempt to coerce named elements of the data to
+the desired type/size. See \link{abort_if_not} for a non-data-masked
+version of this function. \link{restrict} can also be used for
 type casting, size recycling, and validation.
 }
 \examples{

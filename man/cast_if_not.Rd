@@ -15,8 +15,7 @@ cast_if_not(
 \item{...}{any number of named R expressions, in the form of:
 \code{name_of_object_to_cast = object_of_type_to_cast_to}}
 
-\item{.lossy}{if \code{TRUE}, \href{vctrs::allow_lossy_cast}{lossy casting} is
-undertaken.}
+\item{.lossy}{if \code{TRUE}, lossy casting is undertaken.}
 
 \item{.env}{the environment to use for the evaluation of the casting
 expressions and the assignment of the casted objects. Cannot be
@@ -36,8 +35,7 @@ type specified in the expression. Expressions are evaluated and
 objects are assigned into the environment specified by the \code{.env}
 argument. The checking of type and the type conversion are from
 the \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_assert]{vctrs::vec_is}
-and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \link{vctrs type conversion rules}
-(https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \href{https://vctrs.r-lib.org/reference/faq-compatibility-types.html}{vctrs type conversion rules}.
 }
 \examples{
 # NB: Will not alter the global environment so examples

@@ -6,8 +6,7 @@
 #' objects are assigned into the environment specified by the `.env`
 #' argument. The checking of size and the recycling are from the
 #' [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_size]
-#' and [vctrs::vec_recycle]) and thus stick to the [vctrs recycling rules]
-#' (https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+#' and [vctrs::vec_recycle]) and thus stick to the [vctrs recycling rules](https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
 #'
 #' @param ... any number of named R expressions, in the form of:
 #' `name_of_object_to_recycle = size_to_recycle_to`

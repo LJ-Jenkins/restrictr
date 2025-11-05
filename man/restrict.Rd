@@ -52,14 +52,12 @@ These functions accept the named arguments \code{type}, \code{size} and \code{ma
 \item \code{type}: an R object of the desired type (e.g. \code{integer()}, \code{double()},
 \code{character()}, \code{list()}). The type checking and casting are done using
 the \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_assert]{vctrs::vec_is} and
-\link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \link{vctrs type conversion rules}
-(https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+\link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \href{https://vctrs.r-lib.org/reference/faq-compatibility-types.html}{vctrs type conversion rules}.
 \item \code{size}: a positive scalar integerish value specifying the desired size.
 The size checking and recycling are done using the \link{vctrs}
 (https://vctrs.r-lib.org/) package (using \link[vctrs:vec_size]{vctrs::vec_size} and
 \link[vctrs:vec_recycle]{vctrs::vec_recycle}) and thus stick to
-the \link{vctrs recycling rules}
-(https://vctrs.r-lib.org/reference/theory-faq-recycling.html).
+the \href{https://vctrs.r-lib.org/reference/theory-faq-recycling.html}{vctrs recycling rules}.
 \item \code{mask}: the name of an optional data frame or list (found within the \code{.env}
 environment) to use as a data mask for evaluations.
 \item \code{na_rm}: if \code{TRUE}, NA values are removed in the logical vectors

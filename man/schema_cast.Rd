@@ -35,8 +35,7 @@ schema_cast(.data, ...)
 as a data mask. Should follow the format of \code{named_element = expected_type},
 e.g, \code{var_x = integer()} or \code{var_x = var_y}.}
 
-\item{.lossy}{if \code{TRUE}, \href{vctrs::allow_lossy_cast}{lossy casting} is
-undertaken.}
+\item{.lossy}{if \code{TRUE}, lossy casting is undertaken.}
 
 \item{.names}{optional character vector of names which must be
 present in the \code{.data} data.frame/list. Can be a glue string.}
@@ -56,24 +55,21 @@ schema_cast call to be enforced later.
 }
 \description{
 If any of the expressions in \code{...}, evaluated within the data mask
-\code{.data} (see \href{rlang::args_data_masking}{rlang data masking}), are
+\code{.data} (see \link[rlang:args_data_masking]{rlang::args_data_masking}), are
 not of the same type, then the data element attempts to be cast to
 the type specified in the expression. The \code{.names} and \code{.size}
 arguments can be used to check for given names and size of the
 data.frame/list. The checking of type and the type conversion are from the
 \href{https://vctrs.r-lib.org/}{vctrs} package (using \link[vctrs:vec_assert]{vctrs::vec_is}
-and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \link{vctrs type conversion rules}
-(https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+and \link[vctrs:vec_cast]{vctrs::vec_cast}) and thus stick to the \href{https://vctrs.r-lib.org/reference/faq-compatibility-types.html}{vctrs type conversion rules}.
 The checking of size is also from \href{https://vctrs.r-lib.org/}{vctrs}
-(using \link[vctrs:vec_size]{vctrs::vec_size}) and thus applies \link{vctrs size rules}
-(https://vctrs.r-lib.org/articles/type-size.html).
+(using \link[vctrs:vec_size]{vctrs::vec_size}) and thus applies \href{https://vctrs.r-lib.org/articles/type-size.html}{vctrs size rules}.
 }
 \details{
-See \href{restrictr::schema}{schema} and \link{schema_recycle}
-(restrictr::schema_recycle) for validation and recycling, as well as
-\href{restrictr::cast_if_not}{cast_if_not} for a non-data-masked version
-of casting. \href{restrictr::restrict}{restrict} can also be used for
-type casting, size recycling, and validation.
+See \link{schema} and \link{schema_recycle}
+for validation and recycling, as well as \link{cast_if_not} for
+a non-data-masked version of casting. \link{restrict} can also
+be used for type casting, size recycling, and validation.
 }
 \examples{
 # NB: Some of these examples are expected to produce an error. To

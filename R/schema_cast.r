@@ -1,24 +1,21 @@
 #' Ensure data.frame/list elements are of a specific type and cast them if not
 #'
 #' If any of the expressions in `...`, evaluated within the data mask
-#' `.data` (see [rlang data masking](rlang::args_data_masking)), are
+#' `.data` (see [rlang::args_data_masking]), are
 #' not of the same type, then the data element attempts to be cast to
 #' the type specified in the expression. The `.names` and `.size`
 #' arguments can be used to check for given names and size of the
 #' data.frame/list. The checking of type and the type conversion are from the
 #' [vctrs](https://vctrs.r-lib.org/) package (using [vctrs::vec_is]
-#' and [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules]
-#' (https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
+#' and [vctrs::vec_cast]) and thus stick to the [vctrs type conversion rules](https://vctrs.r-lib.org/reference/faq-compatibility-types.html).
 #' The checking of size is also from [vctrs](https://vctrs.r-lib.org/)
-#' (using [vctrs::vec_size]) and thus applies [vctrs size rules]
-#' (https://vctrs.r-lib.org/articles/type-size.html).
+#' (using [vctrs::vec_size]) and thus applies [vctrs size rules](https://vctrs.r-lib.org/articles/type-size.html).
 #'
 #' @param .data a data.frame or list to use as the data mask.
 #' @param ... any number of R expressions to be evaluated using `.data`
 #' as a data mask. Should follow the format of `named_element = expected_type`,
 #' e.g, `var_x = integer()` or `var_x = var_y`.
-#' @param .lossy if `TRUE`, [lossy casting](vctrs::allow_lossy_cast) is
-#' undertaken.
+#' @param .lossy if `TRUE`, lossy casting is undertaken.
 #' @param .names optional character vector of names which must be
 #' present in the `.data` data.frame/list. Can be a glue string.
 #' @param .size optional positive scalar integerish value for the size that
@@ -26,11 +23,10 @@
 #' @param .error_call the call environment to use for error messages
 #' (passed to [rlang::abort]).
 #' @param .darg the argument name of `.data` to use in error messages.
-#' @details See [schema](restrictr::schema) and [schema_recycle]
-#' (restrictr::schema_recycle) for validation and recycling, as well as
-#' [cast_if_not](restrictr::cast_if_not) for a non-data-masked version
-#' of casting. [restrict](restrictr::restrict) can also be used for
-#' type casting, size recycling, and validation.
+#' @details See [restrictr::schema] and [restrictr::schema_recycle]
+#' for validation and recycling, as well as [restrictr::cast_if_not] for
+#' a non-data-masked version of casting. [restrictr::restrict] can also
+#' be used for type casting, size recycling, and validation.
 #' @return Object `.data`, with named elements cast to the desired type. Also
 #' attaches class "with_schema" and attribute "schema" containing the
 #' schema_cast call to be enforced later.
