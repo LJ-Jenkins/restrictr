@@ -1,0 +1,254 @@
+# restrictr
+
+restrictr has been superseded by
+[favr](https://github.com/LJ-Jenkins/favr). Please use favr instead of
+restrictr.
+
+restrictr provides tools for the validation and safe type
+coercion/recycling of function arguments.
+
+## Overview
+
+- [`abort_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/abort_if_not.md)
+  for general validation.
+- [`cast_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/cast_if_not.md)
+  and
+  [`recycle_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/recycle_if_not.md)
+  for safe type casting and recycling of variables.
+- [`schema()`](https://lj-jenkins.github.io/restrictr_test/reference/schema.md)
+  for the validation of named elements of data.frames/lists.
+- [`schema_cast()`](https://lj-jenkins.github.io/restrictr_test/reference/schema_cast.md)
+  and
+  [`schema_recycle()`](https://lj-jenkins.github.io/restrictr_test/reference/schema_recycle.md)
+  for the safe type casting and recycling of named elements of
+  data.frames/lists.
+- [`enforce_schema()`](https://lj-jenkins.github.io/restrictr_test/reference/enforce_schema.md)
+  to reapply the attached schema from the above functions.
+- [`restrict()`](https://lj-jenkins.github.io/restrictr_test/reference/restrict.md)
+  for validation, safe type casting and safe recycling of both variables
+  and named elements of data.frames/lists.
+
+## Installation
+
+You can install the development version of restrictr from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("LJ-Jenkins/restrictr")
+```
+
+## Examples
+
+`abort_if_not` can be used for all validations:
+
+``` r
+library(restrictr)
+
+f <- \(x, y) {
+  abort_if_not(
+    is.character(x),
+    "`{x}` is too short!" = nchar(x) > 5,
+    y$x == 1
+  )
+}
+
+f(1L, list(x = 1))
+#> Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"
+
+f("hi", list(x = 1))
+#> Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"
+```
+
+`cast_if_not` and `recycle_if_not` provide safe casting and recycling
+from [vctrs](https://vctrs.r-lib.org/). Variables are provided on the
+left hand side and the expected type/size is provided on the right.
+Assignment is automatically done back into the environment specified
+(default is the
+[caller_env()](https://rlang.r-lib.org/reference/stack.html)):
+
+``` r
+f <- \(x, y) {
+  cast_if_not(x = double())
+  recycle_if_not(y = x)
+
+  print(class(x))
+  print(length(y))
+}
+
+f(5L, 1)
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
+
+f <- \(x) {
+  cast_if_not(x = integer(), .lossy = TRUE)
+
+  print(x)
+}
+
+f(1.5)
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
+
+f("hi")
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
+```
+
+`schema`, `schema_cast` and `schema_recycle` provide the same
+functionality for data-masked arguments from data.frames/lists. The size
+of the data.frame/list and whether certain names are present can also be
+checked using the `.names` and `.size` arguments. The altered data-mask
+object is returned with an attached class `with_schema` which is used by
+[`enforce_schema()`](https://lj-jenkins.github.io/restrictr_test/reference/enforce_schema.md)
+to reapply the original schema call:
+
+``` r
+f <- \(df) {
+  df |>
+    schema(x == 1)
+}
+
+f(data.frame(x = 2))
+#> Error in (function (cnd) : object 'j' not found
+
+f <- \(df) {
+  df <- df |>
+    schema_cast(x = double())
+
+  print(class(df$x))
+}
+
+f(data.frame(x = 1L))
+#> Error in schema_cast(df, x = double()): could not find function "schema_cast"
+
+# schema_recycle is only implemented for lists.
+f <- \(li) {
+  li <- li |>
+    schema_recycle(x = 3, y = 5, z = vctrs::vec_size(x))
+
+  print(lengths(li))
+}
+
+f(list(x = 1, y = 1, z = 1))
+#> Error in schema_recycle(li, x = 3, y = 5, z = vctrs::vec_size(x)): could not find function "schema_recycle"
+
+# enforce_schema reapplies the original call.
+li <- list(x = 1, y = "hi")
+li_with_schema <- schema(li, x == 1, is.character(y))
+li_with_schema$y <- 1
+
+enforce_schema(li_with_schema)
+#> Error in if (lhs == "") rhs else lhs: argument is of length zero
+
+df <- data.frame(x = 1:2)
+df_with_schema <- schema_cast(df, x = integer(), .lossy = TRUE)
+#> Error in schema_cast(df, x = integer(), .lossy = TRUE): could not find function "schema_cast"
+df_with_schema$x <- c(1.5, 2.5)
+#> Error: object 'df_with_schema' not found
+
+enforce_schema(df_with_schema)$x
+#> Error: object 'df_with_schema' not found
+
+li_with_schema <- schema_recycle(li, x = 2, y = 3)
+#> Error in schema_recycle(li, x = 2, y = 3): could not find function "schema_recycle"
+li_with_schema$y <- "hi"
+
+enforce_schema(li_with_schema)$y
+#> [1] "hi"
+```
+
+`restrict` combines all functionality into a multi-purpose tool. Both
+variables and named elements within data.frames/lists can be validated
+and casted/recycled. They keyword functions of `validate`, `cast`,
+`lossy_cast`, `recycle` and `coerce` determines whether any type casting
+and/or recycling occurs. Validation functions can then be given, either
+in the form of functions or lambdas. Assignment occurs back into the
+environment specified (default is the
+[caller_env()](https://rlang.r-lib.org/reference/stack.html)). A
+contradictory example just to show features:
+
+``` r
+f <- \(df, x) {
+  restrict(
+    df = validate(
+      type = data.frame(x = integer()),
+      size = 1,
+      ~ ncol(.x) == 1,
+      \(.x) colnames(.x) == "x"
+    ),
+    x = cast(type = .env$x, mask = df),
+    x = coerce(type = integer(), size = df$x, lossy = TRUE)
+  )
+
+  cat("`df$x` casted to", class(df$x), "from the initial `x` class \n")
+  cat("`x` lossily casted to", class(x), "and recycled using value of `df$x` to length", length(x))
+}
+
+f(data.frame(x = 3L), 1.5)
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
+
+#-- vctrs type/size rules are for all `cast`, `recycle` and `coerce` calls within restrictr functions
+f <- \(df) {
+  restrict(df = validate(type = data.frame(x = integer(), y = double())))
+}
+
+f(data.frame(x = 1L, y = "hi"))
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
+
+f <- \(x) {
+  restrict(x = recycle(size = 10))
+}
+
+f(1:5)
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
+```
+
+### Notes
+
+restrictr and `restrict` were inspired by MATLAB’s [arguments
+block](https://uk.mathworks.com/help/matlab/ref/arguments.html).
+
+restrictr functions do not do any clean-up in the case of errors. As
+typical usage should be within functions, this should have little
+impact. However, if you intend to continue using the variables in the
+associated environments, care should be taken. See the following
+example:
+
+``` r
+local({
+  x <- 1L
+  y <- 1L
+  cast_if_not(x = double(), y = character()) |> try()
+  cat(
+    "Code has errored but `x` has still been casted to:",
+    class(x), "\n",
+    "in the environment specified for the `cast_if_not` call."
+  )
+})
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn) : 
+#>   could not find function "glue_names"
+#> Code has errored but `x` has still been casted to: integer 
+#>  in the environment specified for the `cast_if_not` call.
+```
+
+# Package index
+
+## All functions
+
+- [`abort_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/abort_if_not.md)
+  : Ensure the truth of R expressions
+- [`cast_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/cast_if_not.md)
+  : Check if objects are of a specific type and cast them if not
+- [`enforce_schema()`](https://lj-jenkins.github.io/restrictr_test/reference/enforce_schema.md)
+  : Enforce an attached schema
+- [`recycle_if_not()`](https://lj-jenkins.github.io/restrictr_test/reference/recycle_if_not.md)
+  : Check if objects are of a specific size and recycle them if not
+- [`restrict()`](https://lj-jenkins.github.io/restrictr_test/reference/restrict.md)
+  : Restrict arguments to a specific type/size and test adherence to
+  validation functions/formulas.
+- [`schema()`](https://lj-jenkins.github.io/restrictr_test/reference/schema.md)
+  : Ensure the truth of data-masked R expressions
+- [`schema_cast()`](https://lj-jenkins.github.io/restrictr_test/reference/schema_cast.md)
+  : Ensure data.frame/list elements are of a specific type and cast them
+  if not
+- [`schema_recycle()`](https://lj-jenkins.github.io/restrictr_test/reference/schema_recycle.md)
+  : Ensure list elements are of a specific size and recycle them if not
+

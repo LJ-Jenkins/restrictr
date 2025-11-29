@@ -52,6 +52,7 @@
 </div>
 <!-- badges: start -->
 
+<p>restrictr has been superseded by <a href="https://github.com/LJ-Jenkins/favr" class="external-link">favr</a>. Please use favr instead of restrictr.</p>
 <p>restrictr provides tools for the validation and safe type coercion/recycling of function arguments.</p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
@@ -95,16 +96,10 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fl">1L</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `abort_if_not()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `is.character(x)`.</span></span>
-<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
+<span><span class="co">#&gt; Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `abort_if_not()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `nchar(x) &gt; 5`.</span></span>
-<span><span class="co">#&gt; ! `hi` is too short!</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"</span></span></code></pre></div>
 <p><code>cast_if_not</code> and <code>recycle_if_not</code> provide safe casting and recycling from <a href="https://vctrs.r-lib.org/" class="external-link">vctrs</a>. Variables are provided on the left hand side and the expected type/size is provided on the right. Assignment is automatically done back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
@@ -116,8 +111,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fl">5L</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "numeric"</span></span>
-<span><span class="co">#&gt; [1] 5</span></span>
+<span><span class="co">#&gt; Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/cast_if_not.html">cast_if_not</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, .lossy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -126,13 +120,10 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="st">"hi"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `cast_if_not()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `x = integer()`.</span></span>
-<span><span class="co">#&gt; ! Can't convert `x` &lt;character&gt; to &lt;integer&gt;.</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"</span></span></code></pre></div>
 <p><code>schema</code>, <code>schema_cast</code> and <code>schema_recycle</code> provide the same functionality for data-masked arguments from data.frames/lists. The size of the data.frame/list and whether certain names are present can also be checked using the <code>.names</code> and <code>.size</code> arguments. The altered data-mask object is returned with an attached class <code>with_schema</code> which is used by <code><a href="reference/enforce_schema.html">enforce_schema()</a></code> to reapply the original schema call:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
@@ -141,10 +132,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `schema()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `x == 1` for data mask `df`.</span></span>
-<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
+<span><span class="co">#&gt; Error in (function (cnd) : object 'j' not found</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
@@ -154,7 +142,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "numeric"</span></span>
+<span><span class="co">#&gt; Error in schema_cast(df, x = double()): could not find function "schema_cast"</span></span>
 <span></span>
 <span><span class="co"># schema_recycle is only implemented for lists.</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">li</span><span class="op">)</span> <span class="op">{</span></span>
@@ -165,8 +153,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="fl">1</span>, z <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; x y z </span></span>
-<span><span class="co">#&gt; 3 5 3</span></span>
+<span><span class="co">#&gt; Error in schema_recycle(li, x = 3, y = 5, z = vctrs::vec_size(x)): could not find function "schema_recycle"</span></span>
 <span></span>
 <span><span class="co"># enforce_schema reapplies the original call.</span></span>
 <span><span class="va">li</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span></span>
@@ -174,23 +161,23 @@
 <span><span class="va">li_with_schema</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">li_with_schema</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; Caused by error in `enforce_schema()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `is.character(y)` for data mask `li_with_schema`.</span></span>
-<span><span class="co">#&gt; ! Returned `FALSE`.</span></span>
+<span><span class="co">#&gt; Error in if (lhs == "") rhs else lhs: argument is of length zero</span></span>
 <span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">df_with_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/schema_cast.html">schema_cast</a></span><span class="op">(</span><span class="va">df</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, .lossy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in schema_cast(df, x = integer(), .lossy = TRUE): could not find function "schema_cast"</span></span>
 <span><span class="va">df_with_schema</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: object 'df_with_schema' not found</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">df_with_schema</span><span class="op">)</span><span class="op">$</span><span class="va">x</span></span>
-<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; Error: object 'df_with_schema' not found</span></span>
 <span></span>
 <span><span class="va">li_with_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/schema_recycle.html">schema_recycle</a></span><span class="op">(</span><span class="va">li</span>, x <span class="op">=</span> <span class="fl">2</span>, y <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in schema_recycle(li, x = 2, y = 3): could not find function "schema_recycle"</span></span>
 <span><span class="va">li_with_schema</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="st">"hi"</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/enforce_schema.html">enforce_schema</a></span><span class="op">(</span><span class="va">li_with_schema</span><span class="op">)</span><span class="op">$</span><span class="va">y</span></span>
-<span><span class="co">#&gt; [1] "hi" "hi" "hi"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "hi"</span></span></code></pre></div>
 <p><code>restrict</code> combines all functionality into a multi-purpose tool. Both variables and named elements within data.frames/lists can be validated and casted/recycled. They keyword functions of <code>validate</code>, <code>cast</code>, <code>lossy_cast</code>, <code>recycle</code> and <code>coerce</code> determines whether any type casting and/or recycling occurs. Validation functions can then be given, either in the form of functions or lambdas. Assignment occurs back into the environment specified (default is the <a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env()</a>). A contradictory example just to show features:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span>, <span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -210,8 +197,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3L</span><span class="op">)</span>, <span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `df$x` casted to numeric from the initial `x` class </span></span>
-<span><span class="co">#&gt; `x` lossily casted to integer and recycled using value of `df$x` to length 3</span></span>
+<span><span class="co">#&gt; Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"</span></span>
 <span></span>
 <span><span class="co">#-- vctrs type/size rules are for all `cast`, `recycle` and `coerce` calls within restrictr functions</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
@@ -219,21 +205,14 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1L</span>, y <span class="op">=</span> <span class="st">"hi"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `restrict()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `df`.</span></span>
-<span><span class="co">#&gt; ! Returned &lt;data.frame&lt;/ x: integer/ y: character/&gt;&gt;, not &lt;data.frame&lt;/ x:</span></span>
-<span><span class="co">#&gt;   integer/ y: double/&gt;&gt;.</span></span>
+<span><span class="co">#&gt; Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/restrict.html">restrict</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">recycle</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">f</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `f()`:</span></span>
-<span><span class="co">#&gt; Caused by error in `restrict()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `x`.</span></span>
-<span><span class="co">#&gt; ! Can't recycle `x` (size 5) to size 10.</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h3>
@@ -250,10 +229,9 @@
 <span>    <span class="st">"in the environment specified for the `cast_if_not` call."</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(quote({ : Caused by error in `cast_if_not()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `y = character()`.</span></span>
-<span><span class="co">#&gt; ! Can't convert `y` &lt;integer&gt; to &lt;character&gt;.</span></span>
-<span><span class="co">#&gt; Code has errored but `x` has still been casted to: numeric </span></span>
+<span><span class="co">#&gt; Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn) : </span></span>
+<span><span class="co">#&gt;   could not find function "glue_names"</span></span>
+<span><span class="co">#&gt; Code has errored but `x` has still been casted to: integer </span></span>
 <span><span class="co">#&gt;  in the environment specified for the `cast_if_not` call.</span></span></code></pre></div>
 </div>
 </div>
@@ -297,7 +275,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
