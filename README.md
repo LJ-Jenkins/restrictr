@@ -8,6 +8,10 @@
 [![R-CMD-check](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
+restrictr has been superseded by
+[favr](https://github.com/LJ-Jenkins/favr). Please use favr instead of
+restrictr.
+
 restrictr provides tools for the validation and safe type
 coercion/recycling of function arguments.
 
@@ -50,16 +54,10 @@ f <- \(x, y) {
 }
 
 f(1L, list(x = 1))
-#> Error in `f()`:
-#> Caused by error in `abort_if_not()`:
-#> ℹ In argument: `is.character(x)`.
-#> ! Returned `FALSE`.
+#> Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"
 
 f("hi", list(x = 1))
-#> Error in `f()`:
-#> Caused by error in `abort_if_not()`:
-#> ℹ In argument: `nchar(x) > 5`.
-#> ! `hi` is too short!
+#> Error in glue_names(tf, eval_env = eval_env, error_call = .error_call, : could not find function "glue_names"
 ```
 
 `cast_if_not` and `recycle_if_not` provide safe casting and recycling
@@ -79,8 +77,7 @@ f <- \(x, y) {
 }
 
 f(5L, 1)
-#> [1] "numeric"
-#> [1] 5
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
 
 f <- \(x) {
   cast_if_not(x = integer(), .lossy = TRUE)
@@ -89,13 +86,10 @@ f <- \(x) {
 }
 
 f(1.5)
-#> [1] 1
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
 
 f("hi")
-#> Error in `f()`:
-#> Caused by error in `cast_if_not()`:
-#> ℹ In argument: `x = integer()`.
-#> ! Can't convert `x` <character> to <integer>.
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn): could not find function "glue_names"
 ```
 
 `schema`, `schema_cast` and `schema_recycle` provide the same
@@ -112,10 +106,7 @@ f <- \(df) {
 }
 
 f(data.frame(x = 2))
-#> Error in `f()`:
-#> Caused by error in `schema()`:
-#> ℹ In argument: `x == 1` for data mask `df`.
-#> ! Returned `FALSE`.
+#> Error in (function (cnd) : object 'j' not found
 
 f <- \(df) {
   df <- df |>
@@ -125,7 +116,7 @@ f <- \(df) {
 }
 
 f(data.frame(x = 1L))
-#> [1] "numeric"
+#> Error in schema_cast(df, x = double()): could not find function "schema_cast"
 
 # schema_recycle is only implemented for lists.
 f <- \(li) {
@@ -136,8 +127,7 @@ f <- \(li) {
 }
 
 f(list(x = 1, y = 1, z = 1))
-#> x y z 
-#> 3 5 3
+#> Error in schema_recycle(li, x = 3, y = 5, z = vctrs::vec_size(x)): could not find function "schema_recycle"
 
 # enforce_schema reapplies the original call.
 li <- list(x = 1, y = "hi")
@@ -145,23 +135,23 @@ li_with_schema <- schema(li, x == 1, is.character(y))
 li_with_schema$y <- 1
 
 enforce_schema(li_with_schema)
-#> Error:
-#> Caused by error in `enforce_schema()`:
-#> ℹ In argument: `is.character(y)` for data mask `li_with_schema`.
-#> ! Returned `FALSE`.
+#> Error in if (lhs == "") rhs else lhs: argument is of length zero
 
 df <- data.frame(x = 1:2)
 df_with_schema <- schema_cast(df, x = integer(), .lossy = TRUE)
+#> Error in schema_cast(df, x = integer(), .lossy = TRUE): could not find function "schema_cast"
 df_with_schema$x <- c(1.5, 2.5)
+#> Error: object 'df_with_schema' not found
 
 enforce_schema(df_with_schema)$x
-#> [1] 1 2
+#> Error: object 'df_with_schema' not found
 
 li_with_schema <- schema_recycle(li, x = 2, y = 3)
+#> Error in schema_recycle(li, x = 2, y = 3): could not find function "schema_recycle"
 li_with_schema$y <- "hi"
 
 enforce_schema(li_with_schema)$y
-#> [1] "hi" "hi" "hi"
+#> [1] "hi"
 ```
 
 `restrict` combines all functionality into a multi-purpose tool. Both
@@ -192,8 +182,7 @@ f <- \(df, x) {
 }
 
 f(data.frame(x = 3L), 1.5)
-#> `df$x` casted to numeric from the initial `x` class 
-#> `x` lossily casted to integer and recycled using value of `df$x` to length 3
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
 
 #-- vctrs type/size rules are for all `cast`, `recycle` and `coerce` calls within restrictr functions
 f <- \(df) {
@@ -201,21 +190,14 @@ f <- \(df) {
 }
 
 f(data.frame(x = 1L, y = "hi"))
-#> Error in `f()`:
-#> Caused by error in `restrict()`:
-#> ℹ In argument: `df`.
-#> ! Returned <data.frame</ x: integer/ y: character/>>, not <data.frame</ x:
-#>   integer/ y: double/>>.
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
 
 f <- \(x) {
   restrict(x = recycle(size = 10))
 }
 
 f(1:5)
-#> Error in `f()`:
-#> Caused by error in `restrict()`:
-#> ℹ In argument: `x`.
-#> ! Can't recycle `x` (size 5) to size 10.
+#> Error in glue_names(rargs, eval_env = .env, error_call = .error_call, : could not find function "glue_names"
 ```
 
 ### Notes
@@ -240,9 +222,8 @@ local({
     "in the environment specified for the `cast_if_not` call."
   )
 })
-#> Error in eval(quote({ : Caused by error in `cast_if_not()`:
-#> ℹ In argument: `y = character()`.
-#> ! Can't convert `y` <integer> to <character>.
-#> Code has errored but `x` has still been casted to: numeric 
+#> Error in glue_names(qs, eval_env = .env, error_call = .error_call, restrictr_fn = restrictr_fn) : 
+#>   could not find function "glue_names"
+#> Code has errored but `x` has still been casted to: integer 
 #>  in the environment specified for the `cast_if_not` call.
 ```

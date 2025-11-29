@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LJ-Jenkins/restrictr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
+restrictr has been superseded by [favr](https://github.com/LJ-Jenkins/favr). Please use favr instead of restrictr.
+
 restrictr provides tools for the validation and safe type coercion/recycling of function arguments.
 
 ## Overview
